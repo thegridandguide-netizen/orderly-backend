@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VenuesRouteImport } from './routes/venues'
 import { Route as PhotosRouteImport } from './routes/photos'
+import { Route as MyBookingsRouteImport } from './routes/my-bookings'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as IndexRouteImport } from './routes/index'
@@ -25,6 +26,11 @@ const VenuesRoute = VenuesRouteImport.update({
 const PhotosRoute = PhotosRouteImport.update({
   id: '/photos',
   path: '/photos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyBookingsRoute = MyBookingsRouteImport.update({
+  id: '/my-bookings',
+  path: '/my-bookings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutRoute = CheckoutRouteImport.update({
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/my-bookings': typeof MyBookingsRoute
   '/photos': typeof PhotosRoute
   '/venues': typeof VenuesRoute
   '/vendor/$id': typeof VendorIdRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/my-bookings': typeof MyBookingsRoute
   '/photos': typeof PhotosRoute
   '/venues': typeof VenuesRoute
   '/vendor/$id': typeof VendorIdRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/my-bookings': typeof MyBookingsRoute
   '/photos': typeof PhotosRoute
   '/venues': typeof VenuesRoute
   '/vendor/$id': typeof VendorIdRoute
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/cart'
     | '/checkout'
+    | '/my-bookings'
     | '/photos'
     | '/venues'
     | '/vendor/$id'
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/cart'
     | '/checkout'
+    | '/my-bookings'
     | '/photos'
     | '/venues'
     | '/vendor/$id'
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/cart'
     | '/checkout'
+    | '/my-bookings'
     | '/photos'
     | '/venues'
     | '/vendor/$id'
@@ -115,6 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
+  MyBookingsRoute: typeof MyBookingsRoute
   PhotosRoute: typeof PhotosRoute
   VenuesRoute: typeof VenuesRoute
   VendorIdRoute: typeof VendorIdRoute
@@ -135,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/photos'
       fullPath: '/photos'
       preLoaderRoute: typeof PhotosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my-bookings': {
+      id: '/my-bookings'
+      path: '/my-bookings'
+      fullPath: '/my-bookings'
+      preLoaderRoute: typeof MyBookingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout': {
@@ -179,6 +199,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
+  MyBookingsRoute: MyBookingsRoute,
   PhotosRoute: PhotosRoute,
   VenuesRoute: VenuesRoute,
   VendorIdRoute: VendorIdRoute,
