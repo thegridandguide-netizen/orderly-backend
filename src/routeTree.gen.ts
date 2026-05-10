@@ -9,38 +9,122 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VenuesRouteImport } from './routes/venues'
+import { Route as PhotosRouteImport } from './routes/photos'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VenueIdRouteImport } from './routes/venue.$id'
+import { Route as VendorIdRouteImport } from './routes/vendor.$id'
 
+const VenuesRoute = VenuesRouteImport.update({
+  id: '/venues',
+  path: '/venues',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PhotosRoute = PhotosRouteImport.update({
+  id: '/photos',
+  path: '/photos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VenueIdRoute = VenueIdRouteImport.update({
+  id: '/venue/$id',
+  path: '/venue/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VendorIdRoute = VendorIdRouteImport.update({
+  id: '/vendor/$id',
+  path: '/vendor/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
+  '/photos': typeof PhotosRoute
+  '/venues': typeof VenuesRoute
+  '/vendor/$id': typeof VendorIdRoute
+  '/venue/$id': typeof VenueIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
+  '/photos': typeof PhotosRoute
+  '/venues': typeof VenuesRoute
+  '/vendor/$id': typeof VendorIdRoute
+  '/venue/$id': typeof VenueIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
+  '/photos': typeof PhotosRoute
+  '/venues': typeof VenuesRoute
+  '/vendor/$id': typeof VendorIdRoute
+  '/venue/$id': typeof VenueIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/checkout'
+    | '/photos'
+    | '/venues'
+    | '/vendor/$id'
+    | '/venue/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/checkout' | '/photos' | '/venues' | '/vendor/$id' | '/venue/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/checkout'
+    | '/photos'
+    | '/venues'
+    | '/vendor/$id'
+    | '/venue/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CheckoutRoute: typeof CheckoutRoute
+  PhotosRoute: typeof PhotosRoute
+  VenuesRoute: typeof VenuesRoute
+  VendorIdRoute: typeof VendorIdRoute
+  VenueIdRoute: typeof VenueIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/venues': {
+      id: '/venues'
+      path: '/venues'
+      fullPath: '/venues'
+      preLoaderRoute: typeof VenuesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/photos': {
+      id: '/photos'
+      path: '/photos'
+      fullPath: '/photos'
+      preLoaderRoute: typeof PhotosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +132,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/venue/$id': {
+      id: '/venue/$id'
+      path: '/venue/$id'
+      fullPath: '/venue/$id'
+      preLoaderRoute: typeof VenueIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vendor/$id': {
+      id: '/vendor/$id'
+      path: '/vendor/$id'
+      fullPath: '/vendor/$id'
+      preLoaderRoute: typeof VendorIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CheckoutRoute: CheckoutRoute,
+  PhotosRoute: PhotosRoute,
+  VenuesRoute: VenuesRoute,
+  VendorIdRoute: VendorIdRoute,
+  VenueIdRoute: VenueIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

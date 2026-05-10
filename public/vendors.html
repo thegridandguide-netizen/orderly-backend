@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventix – Vendors</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body data-page="vendors">
+
+<!-- NAVBAR -->
+<header class="navbar" id="main-nav">
+  <div class="container nav-container">
+    <div class="nav-left">
+      <div class="logo" onclick="showPage('home')">𝐄𝐯𝐞𝐧𝐭𝐢𝐱</div>
+      <ul class="nav-menu">
+        <li class="has-dropdown">
+          <a onclick="showPage('venues')" class="nav-link" data-page="venues">Venues</a>
+          <div class="mega-menu">
+            <div class="mega-container">
+              <div class="mega-col">
+                <h4 class="mega-title">By Type</h4>
+                <ul><li>Banquet Halls</li><li>Marriage Garden / Lawns</li><li>Wedding Resorts</li><li>Small Function / Party Halls</li><li>Destination Wedding Venues</li><li>4 Star &amp; Above Hotels</li><li>View all Venues →</li></ul>
+              </div>
+              <div class="mega-col">
+                <h4 class="mega-title">By City</h4>
+                <ul><li>Dhaka</li><li>Chittagong</li><li>Sylhet</li><li>Rajshahi</li><li>Khulna</li><li>Cox's Bazar</li><li><b>More Cities →</b></li></ul>
+              </div>
+              <div class="mega-col">
+                <h4 class="mega-title">Destination Venues</h4>
+                <div class="destination-grid">
+                  <div class="dest-card"><img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=150" alt="Goa"><span>Goa</span></div>
+                  <div class="dest-card"><img src="https://images.unsplash.com/photo-1598977123418-4545c94188c4?auto=format&fit=crop&q=80&w=150" alt="Jaipur"><span>Jaipur</span></div>
+                  <div class="dest-card"><img src="https://images.unsplash.com/photo-1582650629119-c6bbef5df03a?auto=format&fit=crop&q=80&w=150" alt="Udaipur"><span>Udaipur</span></div>
+                  <div class="dest-card"><img src="https://images.unsplash.com/photo-1548013146-72479768bbaa?auto=format&fit=crop&q=80&w=150" alt="Thailand"><span>Thailand</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="has-dropdown">
+          <a onclick="showPage('vendors')" class="nav-link" data-page="vendors">Vendors</a>
+          <div class="mega-menu vendor-menu">
+            <div class="mega-container">
+              <div class="mega-col">
+                <h4 class="mega-title">Photographers</h4><ul><li>Wedding Photographers</li><li>Pre-Wedding Shoots</li></ul>
+                <h4 class="mega-title">Makeup</h4><ul><li>Bridal Makeup Artists</li><li>Family Makeup</li></ul>
+                <h4 class="mega-title">Planning &amp; Decor</h4><ul><li>Wedding Planners</li><li>Decorators</li></ul>
+              </div>
+              <div class="mega-col">
+                <h4 class="mega-title">Music &amp; Dance</h4><ul><li>DJs</li><li>Sangeet Choreographer</li><li>Wedding Entertainment</li></ul>
+                <h4 class="mega-title">Invites &amp; Gifts</h4><ul><li>Invitations</li><li>Favors</li><li>Trousseau Packers</li><li>Mehendi Favors</li></ul>
+              </div>
+              <div class="mega-col">
+                <h4 class="mega-title">Bridal Wear</h4><ul><li>Bridal Lehengas</li><li>Silk Sarees</li><li>Cocktail Gowns</li><li>Lehenga on Rent</li></ul>
+                <h4 class="mega-title">Groom Wear</h4><ul><li>Sherwani</li><li>Wedding Suits / Tuxes</li><li>Sherwani On Rent</li></ul>
+              </div>
+              <div class="mega-col">
+                <h4 class="mega-title">Jewellery</h4><ul><li>Jewellery</li><li>Flower Jewellery</li><li>Bridal Jewellery on Rent</li><li>Accessories</li></ul>
+                <h4 class="mega-title">Catering</h4><ul><li>Caterers</li><li>Bartenders</li></ul>
+                <h4 class="mega-title">Grooming</h4><ul><li>Beauty &amp; Wellness</li><li>Mehendi Artists</li></ul>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="has-dropdown">
+          <a onclick="showPage('photos')" class="nav-link" data-page="photos">Photos</a>
+          <div class="mega-menu photo-menu">
+            <div class="mega-container">
+              <div class="mega-col">
+                <h4 class="mega-title">Inspirations</h4>
+                <ul><li>Inspiration Gallery</li><li>Real Events</li><li>Decor Ideas</li><li>Event Themes</li><li>Colour Palettes</li></ul>
+              </div>
+              <div class="mega-col">
+                <h4 class="mega-title">By Category</h4>
+                <div class="photo-category-grid">
+                  <div class="photo-cat-item"><img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=100" alt="Decor"><span>Decor</span></div>
+                  <div class="photo-cat-item"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=100" alt="Outfits"><span>Outfits</span></div>
+                  <div class="photo-cat-item"><img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=100" alt="Catering"><span>Catering</span></div>
+                  <div class="photo-cat-item"><img src="https://images.unsplash.com/photo-1501386761578-eaa54b07c8e5?auto=format&fit=crop&q=80&w=100" alt="Music"><span>Entertainment</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li><a onclick="showPage('explore')" class="nav-link" data-page="explore">Explore Events</a></li>
+      </ul>
+    </div>
+    <div class="nav-right">
+      <i class="fa-solid fa-magnifying-glass search-icon" id="searchToggle"></i>
+      <button class="btn-primary" id="navLoginBtn">Log In</button>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- ══ MOBILE DRAWER ══ -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="mobile-drawer-panel">
+    <div class="drawer-header">
+      <div class="drawer-logo">𝐄𝐯𝐞𝐧𝐭𝐢𝐱</div>
+      <div class="drawer-tagline">Crafting Incredible Events</div>
+    </div>
+    <nav class="drawer-nav">
+      <div class="drawer-nav-item active" onclick="showPage('home');closeDrawer()"><i class="fa-solid fa-house"></i> Home</div>
+      <div class="drawer-nav-item" onclick="showPage('venues');closeDrawer()"><i class="fa-solid fa-building"></i> Venues</div>
+      <div class="drawer-nav-item" onclick="showPage('vendors');closeDrawer()"><i class="fa-solid fa-store"></i> Vendors</div>
+      <div class="drawer-nav-item" onclick="showPage('photos');closeDrawer()"><i class="fa-solid fa-images"></i> Photos</div>
+      <div class="drawer-nav-item" onclick="showPage('explore');closeDrawer()"><i class="fa-solid fa-compass"></i> Explore</div>
+    </nav>
+    <div class="drawer-actions">
+      <button class="btn-primary" onclick="closeDrawer();openM(loginModal)" style="width:100%;border-radius:10px;padding:13px;font-size:15px;animation:none;">Log In</button>
+    </div>
+  </div>
+  <div class="mobile-drawer-backdrop" id="drawerBackdrop"></div>
+</div>
+
+<!-- ══ BOTTOM NAV ══ -->
+<nav class="bottom-nav" id="bottomNav">
+  <div class="bn-item active" data-page="home" onclick="showPage('home')"><i class="fa-solid fa-house"></i><span>Home</span></div>
+  <div class="bn-item" data-page="venues" onclick="showPage('venues')"><i class="fa-solid fa-building"></i><span>Venues</span></div>
+  <div class="bn-item" data-page="vendors" onclick="showPage('vendors')"><i class="fa-solid fa-store"></i><span>Vendors</span></div>
+  <div class="bn-item" data-page="photos" onclick="showPage('photos')"><i class="fa-solid fa-images"></i><span>Photos</span></div>
+  <div class="bn-item" data-page="explore" onclick="showPage('explore')"><i class="fa-solid fa-compass"></i><span>Explore</span></div>
+</nav>
+
+<!-- ══ SEARCH OVERLAY ══ -->
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-box" style="position:relative;">
+    <button class="close-search" id="closeSearch">&times;</button>
+    <input type="text" placeholder="Search venues, photographers, caterers..." id="overlaySearchInput" autofocus>
+    <div class="search-suggestions">
+      <span class="suggestion-chip" onclick="searchNav('Rooftop Venues')">Rooftop Venues</span>
+      <span class="suggestion-chip" onclick="searchNav('Bridal Makeup')">Bridal Makeup</span>
+      <span class="suggestion-chip" onclick="searchNav('Candid Photography')">Candid Photography</span>
+      <span class="suggestion-chip" onclick="searchNav('Wedding Caterers')">Wedding Caterers</span>
+      <span class="suggestion-chip" onclick="searchNav('DJ Events')">DJ Events</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FLOATING ACTION BUTTON ══ -->
+<button class="fab" id="fabBtn" onclick="openM(loginModal)" title="Quick login"><i class="fa-solid fa-bolt"></i></button>
+
+
+<!-- ═══ HOME PAGE ═══ -->
+<div id="page-vendors" class="page active">
+  <div class="container">
+    <div class="vendor-page-container">
+      <aside class="filter-sidebar">
+        <div class="filter-group">
+          <h4>Vendor Type</h4>
+          <label class="filter-option"><input type="checkbox" checked> Photographers</label>
+          <label class="filter-option"><input type="checkbox"> Makeup Artists</label>
+          <label class="filter-option"><input type="checkbox"> Decorators</label>
+          <label class="filter-option"><input type="checkbox"> Caterers</label>
+          <label class="filter-option"><input type="checkbox"> DJs &amp; Music</label>
+          <label class="filter-option"><input type="checkbox"> Wedding Planners</label>
+          <label class="filter-option"><input type="checkbox"> Bridal Wear</label>
+          <label class="filter-option"><input type="checkbox"> Videographers</label>
+        </div>
+        <div class="filter-group">
+          <h4>Price Range</h4>
+          <label class="filter-option"><input type="radio" name="price"> Under ৳10,000</label>
+          <label class="filter-option"><input type="radio" name="price"> ৳10,000 – ৳50,000</label>
+          <label class="filter-option"><input type="radio" name="price"> ৳50,000 – ৳1,00,000</label>
+          <label class="filter-option"><input type="radio" name="price"> ৳1,00,000+</label>
+        </div>
+        <div class="filter-group">
+          <h4>Ratings</h4>
+          <label class="filter-option"><input type="checkbox"> 4.5 &amp; above</label>
+          <label class="filter-option"><input type="checkbox"> 4.0 &amp; above</label>
+          <label class="filter-option"><input type="checkbox"> 3.5 &amp; above</label>
+        </div>
+        <div class="filter-group">
+          <h4>Experience</h4>
+          <label class="filter-option"><input type="checkbox"> 1–3 years</label>
+          <label class="filter-option"><input type="checkbox"> 3–7 years</label>
+          <label class="filter-option"><input type="checkbox"> 7+ years</label>
+        </div>
+        <button class="btn-primary" style="width:100%;border-radius:8px">Apply Filters</button>
+      </aside>
+      <main class="content-area">
+        <div class="vendor-results-header">
+          <span class="results-count">248 Vendors found</span>
+          <select class="sort-select"><option>Popularity</option><option>Price: Low to High</option><option>Price: High to Low</option><option>Rating: High to Low</option><option>Most Reviewed</option></select>
+        </div>
+        <div class="vendor-grid-main">
+          <div class="vendor-card"><div class="card-img-container"><img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=500" alt="Vendor"><button class="wishlist-btn"><i class="fa-regular fa-heart"></i></button></div><div class="vendor-info"><span class="category-tag">📸 Photographer</span><h3>Ethereal Moments Studio</h3><p class="location"><i class="fa-solid fa-location-dot"></i> Gulshan, Dhaka</p><span class="vendor-badge">Top Rated</span><div class="vendor-stats"><span class="vendor-rating"><i class="fa-solid fa-star"></i> 4.9 (142)</span><span class="price-tag">From ৳80,000</span></div></div></div>
+          <div class="vendor-card"><div class="card-img-container"><img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=500" alt="Vendor"><button class="wishlist-btn"><i class="fa-regular fa-heart"></i></button></div><div class="vendor-info"><span class="category-tag">💄 Makeup Artist</span><h3>Glamour by Sabrina</h3><p class="location"><i class="fa-solid fa-location-dot"></i> Dhanmondi, Dhaka</p><span class="vendor-badge">Award Winner</span><div class="vendor-stats"><span class="vendor-rating"><i class="fa-solid fa-star"></i> 4.8 (85)</span><span class="price-tag">From ৳15,000</span></div></div></div>
+          <div class="vendor-card"><div class="card-img-container"><img src="https://images.unsplash.com/photo-1478146522997-6f2d0285a219?auto=format&fit=crop&w=500" alt="Vendor"><button class="wishlist-btn"><i class="fa-regular fa-heart"></i></button></div><div class="vendor-info"><span class="category-tag">🌸 Decorator</span><h3>Bloom Events &amp; Decor</h3><p class="location"><i class="fa-solid fa-location-dot"></i> Banani, Dhaka</p><div class="vendor-stats"><span class="vendor-rating"><i class="fa-solid fa-star"></i> 4.7 (63)</span><span class="price-tag">From ৳50,000</span></div></div></div>
+          <div class="vendor-card"><div class="card-img-container"><img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=500" alt="Vendor"><button class="wishlist-btn"><i class="fa-regular fa-heart"></i></button></div><div class="vendor-info"><span class="category-tag">🍽️ Caterer</span><h3>Royal Feast Catering</h3><p class="location"><i class="fa-solid fa-location-dot"></i> Mirpur, Dhaka</p><span class="vendor-badge">Most Booked</span><div class="vendor-stats"><span class="vendor-rating"><i class="fa-solid fa-star"></i> 4.6 (211)</span><span class="price-tag">৳650/person</span></div></div></div>
+          <div class="vendor-card"><div class="card-img-container"><img src="https://images.unsplash.com/photo-1501386761578-eaa54b07c8e5?auto=format&fit=crop&w=500" alt="Vendor"><button class="wishlist-btn"><i class="fa-regular fa-heart"></i></button></div><div class="vendor-info"><span class="category-tag">🎶 DJ &amp; Music</span><h3>BeatMaster Events</h3><p class="location"><i class="fa-solid fa-location-dot"></i> Uttara, Dhaka</p><div class="vendor-stats"><span class="vendor-rating"><i class="fa-solid fa-star"></i> 4.5 (47)</span><span class="price-tag">From ৳30,000</span></div></div></div>
+          <div class="vendor-card"><div class="card-img-container"><img src="https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=500" alt="Vendor"><button class="wishlist-btn"><i class="fa-regular fa-heart"></i></button></div><div class="vendor-info"><span class="category-tag">📋 Event Planner</span><h3>Perfect Day Planning Co.</h3><p class="location"><i class="fa-solid fa-location-dot"></i> Chittagong</p><span class="vendor-badge">Top Rated</span><div class="vendor-stats"><span class="vendor-rating"><i class="fa-solid fa-star"></i> 5.0 (29)</span><span class="price-tag">From ৳1,20,000</span></div></div></div>
+        </div>
+        <div style="text-align:center;padding:36px 0"><button onmouseover="this.style.background='var(--pink)';this.style.color='#fff'" onmouseout="this.style.background='#fff';this.style.color='var(--pink)'" style="padding:12px 40px;border:2px solid var(--pink);color:var(--pink);background:#fff;border-radius:25px;font-size:15px;font-weight:700;cursor:pointer" id="loadMoreVendorsBtn" onclick="loadMoreVendors()">Load More Vendors</button></div>
+      </main>
+    </div>
+  </div>
+
+<!-- CONTACT US SECTION -->
+<section class="page-contact" data-reveal>
+  <div class="container">
+    <div class="contact-inner">
+
+      <!-- Col 1: Contact details + social + blog alert -->
+      <div class="contact-col">
+        <h4>Contact Us to Get Best Deals</h4>
+        <div class="contact-two-col">
+          <div class="contact-sub-col">
+            <h5>For Vendors</h5>
+            <p>vendors@eventix.com</p>
+            <p>+880 1700-000001</p>
+          </div>
+          <div class="contact-sub-col">
+            <h5>For Users</h5>
+            <p>info@eventix.com</p>
+            <p>+880 1700-000000</p>
+          </div>
+        </div>
+
+        <h4 style="margin-top:28px;">Follow Us On</h4>
+        <div class="contact-social">
+          <a href="#" class="fb"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
+          <a href="#" class="tw"><i class="fa-brands fa-twitter"></i> Twitter</a>
+          <a href="#" class="pt"><i class="fa-brands fa-pinterest-p"></i> Pinterest</a>
+          <a href="#" class="ig"><i class="fa-brands fa-instagram"></i> Instagram</a>
+          <a href="#" class="yt"><i class="fa-brands fa-youtube"></i> Youtube</a>
+        </div>
+
+        <h4 style="margin-top:28px;">Get Latest Blog Alerts</h4>
+        <div class="contact-blog-row">
+          <input type="email" placeholder="Email*">
+          <button>Submit</button>
+        </div>
+        <button class="contact-register-btn" style="margin-top:14px;">Register as a Vendor</button>
+      </div>
+
+      <!-- Col 2: Registered address -->
+      <div class="contact-col">
+        <h4>Registered Address</h4>
+        <p class="contact-address">
+          <i class="fa-solid fa-location-dot"></i>
+          House 12, Road 4, Block B,<br>
+          Bashundhara R/A,<br>
+          Dhaka – 1229, Bangladesh
+        </p>
+        <p style="margin-top:16px;"><i class="fa-solid fa-envelope" style="color:var(--pink);margin-right:8px;"></i><a href="mailto:info@eventix.com">info@eventix.com</a></p>
+        <p><i class="fa-solid fa-phone" style="color:var(--pink);margin-right:8px;"></i><a href="tel:+88017000000000">+880 1700-000000</a></p>
+        <p><i class="fa-solid fa-clock" style="color:var(--pink);margin-right:8px;"></i>Sun – Thu: 9 AM – 7 PM</p>
+      </div>
+
+      <!-- Col 3: Get the App -->
+      <div class="contact-col">
+        <h4>Get The Eventix App</h4>
+        <p style="font-size:13px;color:#888;margin-bottom:16px;">Plan your event on the go. Available on iOS &amp; Android.</p>
+        <div class="contact-store-btns">
+          <button class="contact-store-btn">
+            <i class="fa-brands fa-apple"></i>
+            <div class="csb-text"><span>Download on the</span><b>App Store</b></div>
+          </button>
+          <button class="contact-store-btn">
+            <i class="fa-brands fa-google-play"></i>
+            <div class="csb-text"><span>GET IT ON</span><b>Google Play</b></div>
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /contact-inner -->
+
+    <div class="contact-bottom">
+      <div class="copyright">&copy; 2026 Eventix. All rights reserved.</div>
+      <div class="bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Cancellation Policy</a>
+        <a href="#">Site Map</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+
+<!-- ═══ PHOTOS PAGE ═══ -->
+<div class="modal-overlay" id="loginModal">
+  <div class="login-card">
+    <div class="login-image"></div>
+    <div class="login-form-container">
+      <span class="close-modal" id="closeModal">&times;</span>
+      <div class="heart-logo">❤️</div>
+      <h2 class="brand-name">Eventix</h2>
+      <p style="color:#aaa;font-size:13px;margin-bottom:18px">Welcome back! Log in to your account.</p>
+      <form>
+        <div class="input-group"><i class="fa-regular fa-envelope"></i><input type="text" placeholder="Email or Phone"></div>
+        <div class="input-group"><i class="fa-solid fa-lock"></i><input type="password" placeholder="Password"><i class="fa-regular fa-eye" style="cursor:pointer;color:#bbb"></i></div>
+        <div class="form-options"><label><input type="checkbox"> Remember me</label><a href="#">Forgot Password?</a></div>
+        <button type="submit" class="btn-login-submit">Log In</button>
+      </form>
+      <div class="divider">OR</div>
+      <button class="social-btn"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="17" alt="G"> Continue with Google</button>
+      <button class="social-btn"><i class="fa-brands fa-apple"></i> Continue with Apple</button>
+      <p class="signup-text">Don't have an account? <a href="#" id="toSignupLink">Sign Up</a></p>
+      <p class="security-text"><i class="fa-solid fa-lock"></i> Your data is safe &amp; protected</p>
+    </div>
+  </div>
+</div>
+
+<!-- SIGNUP MODAL -->
+<div class="modal-overlay" id="signupModal">
+  <div class="login-card">
+    <div class="login-image" style="background-image:url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=800');background-size:cover;background-position:center"></div>
+    <div class="login-form-container">
+      <span class="close-modal" id="closeSignup">&times;</span>
+      <div class="heart-logo">❤️</div>
+      <h2 class="brand-name">Eventix</h2>
+      <p style="color:#aaa;font-size:13px;margin-bottom:14px">Create your free account today.</p>
+      <form>
+        <div class="name-row"><div class="input-group"><i class="fa-regular fa-user"></i><input type="text" placeholder="First Name"></div><div class="input-group"><i class="fa-regular fa-user"></i><input type="text" placeholder="Last Name"></div></div>
+        <div class="input-group"><i class="fa-regular fa-envelope"></i><input type="email" placeholder="Email"></div>
+        <div class="input-group"><i class="fa-solid fa-lock"></i><input type="password" placeholder="Password"><i class="fa-regular fa-eye" style="cursor:pointer;color:#bbb"></i></div>
+        <button type="submit" class="btn-login-submit">Create Account</button>
+      </form>
+      <div class="divider">or</div>
+      <div class="social-login-row">
+        <button class="social-btn"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="16" alt="G"> Google</button>
+        <button class="social-btn apple-black"><i class="fa-brands fa-apple"></i> Apple</button>
+      </div>
+      <p class="signup-text">Already have an account? <a href="#" id="toLogin">Log In</a></p>
+      <p class="security-text"><i class="fa-solid fa-lock"></i> Your data is safe &amp; protected</p>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="static-data.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

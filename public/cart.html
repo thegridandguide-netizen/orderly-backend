@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart – Eventix</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="cart">
+<header class="navbar" id="main-nav">
+  <div class="container nav-container">
+    <div class="nav-left">
+      <div class="logo" onclick="location.href='index.html'">𝐄𝐯𝐞𝐧𝐭𝐢𝐱</div>
+      <ul class="nav-menu">
+        <li><a href="venues.html" class="nav-link">Venues</a></li>
+        <li><a href="vendors.html" class="nav-link">Vendors</a></li>
+        <li><a href="photos.html" class="nav-link">Photos</a></li>
+      </ul>
+    </div>
+    <div class="nav-right">
+      <button class="btn-primary" id="navLoginBtn">Log In</button>
+    </div>
+  </div>
+</header>
+
+<main class="bk-wrap">
+  <div class="bk-container">
+    <h1 class="bk-title"><i class="fa-solid fa-cart-shopping"></i> Your Cart</h1>
+    <div id="cartLoading" class="bk-card">Loading…</div>
+    <div id="cartEmpty" class="bk-card" style="display:none;text-align:center;padding:60px 20px;">
+      <i class="fa-solid fa-cart-arrow-down" style="font-size:48px;color:#ccc;margin-bottom:14px;"></i>
+      <h3>Your cart is empty</h3>
+      <p style="color:#666;margin:6px 0 18px;">Browse venues and services to get started.</p>
+      <a href="venues.html" class="bk-btn bk-btn-primary">Browse Venues</a>
+    </div>
+    <div id="cartContent" style="display:none;">
+      <div class="bk-grid">
+        <div id="cartItems"></div>
+        <aside class="bk-summary">
+          <h3>Order Summary</h3>
+          <div class="bk-row"><span>Subtotal</span><span id="sumSubtotal">৳ 0</span></div>
+          <div class="bk-row"><span>Items</span><span id="sumCount">0</span></div>
+          <hr>
+          <div class="bk-row bk-total"><span>Total</span><span id="sumTotal">৳ 0</span></div>
+          <p class="bk-hint">A 20% deposit is required to confirm your booking. Pay full amount at checkout if preferred.</p>
+          <a href="checkout.html" class="bk-btn bk-btn-primary" style="width:100%;justify-content:center;">Proceed to Checkout <i class="fa-solid fa-arrow-right"></i></a>
+        </aside>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="static-data.js"></script>
+<script src="nav-extras.js"></script>
+<script src="cart.js"></script>
+</body>
+</html>

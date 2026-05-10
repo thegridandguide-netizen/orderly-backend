@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventix – Crafting Incredible Events</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body data-page="home">
+
+<!-- NAVBAR -->
+<header class="navbar" id="main-nav">
+  <div class="container nav-container">
+    <div class="nav-left">
+      <div class="logo" onclick="showPage('home')">𝐄𝐯𝐞𝐧𝐭𝐢𝐱</div>
+      <ul class="nav-menu">
+        <li class="has-dropdown">
+          <a onclick="showPage('venues')" class="nav-link" data-page="venues">Venues</a>
+          <div class="mega-menu">
+            <div class="mega-container">
+              <div class="mega-col">
+                <h4 class="mega-title">By Type</h4>
+                <ul><li>Banquet Halls</li><li>Marriage Garden / Lawns</li><li>Wedding Resorts</li><li>Small Function / Party Halls</li><li>Destination Wedding Venues</li><li>4 Star &amp; Above Hotels</li><li>View all Venues →</li></ul>
+              </div>
+              <div class="mega-col">
+                <h4 class="mega-title">By City</h4>
+                <ul><li>Dhaka</li><li>Chittagong</li><li>Sylhet</li><li>Rajshahi</li><li>Khulna</li><li>Cox's Bazar</li><li><b>More Cities →</b></li></ul>
+              </div>
+              <div class="mega-col">
+                <h4 class="mega-title">Destination Venues</h4>
+                <div class="destination-grid">
+                  <div class="dest-card"><img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=150" alt="Goa"><span>Goa</span></div>
+                  <div class="dest-card"><img src="https://images.unsplash.com/photo-1598977123418-4545c94188c4?auto=format&fit=crop&q=80&w=150" alt="Jaipur"><span>Jaipur</span></div>
+                  <div class="dest-card"><img src="https://images.unsplash.com/photo-1582650629119-c6bbef5df03a?auto=format&fit=crop&q=80&w=150" alt="Udaipur"><span>Udaipur</span></div>
+                  <div class="dest-card"><img src="https://images.unsplash.com/photo-1548013146-72479768bbaa?auto=format&fit=crop&q=80&w=150" alt="Thailand"><span>Thailand</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="has-dropdown">
+          <a onclick="showPage('vendors')" class="nav-link" data-page="vendors">Vendors</a>
+          <div class="mega-menu vendor-menu">
+            <div class="mega-container">
+              <div class="mega-col">
+                <h4 class="mega-title">Photographers</h4><ul><li>Wedding Photographers</li><li>Pre-Wedding Shoots</li></ul>
+                <h4 class="mega-title">Makeup</h4><ul><li>Bridal Makeup Artists</li><li>Family Makeup</li></ul>
+                <h4 class="mega-title">Planning &amp; Decor</h4><ul><li>Wedding Planners</li><li>Decorators</li></ul>
+              </div>
+              <div class="mega-col">
+                <h4 class="mega-title">Music &amp; Dance</h4><ul><li>DJs</li><li>Sangeet Choreographer</li><li>Wedding Entertainment</li></ul>
+                <h4 class="mega-title">Invites &amp; Gifts</h4><ul><li>Invitations</li><li>Favors</li><li>Trousseau Packers</li><li>Mehendi Favors</li></ul>
+              </div>
+              <div class="mega-col">
+                <h4 class="mega-title">Bridal Wear</h4><ul><li>Bridal Lehengas</li><li>Silk Sarees</li><li>Cocktail Gowns</li><li>Lehenga on Rent</li></ul>
+                <h4 class="mega-title">Groom Wear</h4><ul><li>Sherwani</li><li>Wedding Suits / Tuxes</li><li>Sherwani On Rent</li></ul>
+              </div>
+              <div class="mega-col">
+                <h4 class="mega-title">Jewellery</h4><ul><li>Jewellery</li><li>Flower Jewellery</li><li>Bridal Jewellery on Rent</li><li>Accessories</li></ul>
+                <h4 class="mega-title">Catering</h4><ul><li>Caterers</li><li>Bartenders</li></ul>
+                <h4 class="mega-title">Grooming</h4><ul><li>Beauty &amp; Wellness</li><li>Mehendi Artists</li></ul>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="has-dropdown">
+          <a onclick="showPage('photos')" class="nav-link" data-page="photos">Photos</a>
+          <div class="mega-menu photo-menu">
+            <div class="mega-container">
+              <div class="mega-col">
+                <h4 class="mega-title">Inspirations</h4>
+                <ul><li>Inspiration Gallery</li><li>Real Events</li><li>Decor Ideas</li><li>Event Themes</li><li>Colour Palettes</li></ul>
+              </div>
+              <div class="mega-col">
+                <h4 class="mega-title">By Category</h4>
+                <div class="photo-category-grid">
+                  <div class="photo-cat-item"><img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=100" alt="Decor"><span>Decor</span></div>
+                  <div class="photo-cat-item"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=100" alt="Outfits"><span>Outfits</span></div>
+                  <div class="photo-cat-item"><img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=100" alt="Catering"><span>Catering</span></div>
+                  <div class="photo-cat-item"><img src="https://images.unsplash.com/photo-1501386761578-eaa54b07c8e5?auto=format&fit=crop&q=80&w=100" alt="Music"><span>Entertainment</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li><a onclick="showPage('explore')" class="nav-link" data-page="explore">Explore Events</a></li>
+      </ul>
+    </div>
+    <div class="nav-right">
+      <i class="fa-solid fa-magnifying-glass search-icon" id="searchToggle"></i>
+      <button class="btn-primary" id="navLoginBtn">Log In</button>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- ══ MOBILE DRAWER ══ -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="mobile-drawer-panel">
+    <div class="drawer-header">
+      <div class="drawer-logo">𝐄𝐯𝐞𝐧𝐭𝐢𝐱</div>
+      <div class="drawer-tagline">Crafting Incredible Events</div>
+    </div>
+    <nav class="drawer-nav">
+      <div class="drawer-nav-item active" onclick="showPage('home');closeDrawer()"><i class="fa-solid fa-house"></i> Home</div>
+      <div class="drawer-nav-item" onclick="showPage('venues');closeDrawer()"><i class="fa-solid fa-building"></i> Venues</div>
+      <div class="drawer-nav-item" onclick="showPage('vendors');closeDrawer()"><i class="fa-solid fa-store"></i> Vendors</div>
+      <div class="drawer-nav-item" onclick="showPage('photos');closeDrawer()"><i class="fa-solid fa-images"></i> Photos</div>
+      <div class="drawer-nav-item" onclick="showPage('explore');closeDrawer()"><i class="fa-solid fa-compass"></i> Explore</div>
+    </nav>
+    <div class="drawer-actions">
+      <button class="btn-primary" onclick="closeDrawer();openM(loginModal)" style="width:100%;border-radius:10px;padding:13px;font-size:15px;animation:none;">Log In</button>
+    </div>
+  </div>
+  <div class="mobile-drawer-backdrop" id="drawerBackdrop"></div>
+</div>
+
+<!-- ══ BOTTOM NAV ══ -->
+<nav class="bottom-nav" id="bottomNav">
+  <div class="bn-item active" data-page="home" onclick="showPage('home')"><i class="fa-solid fa-house"></i><span>Home</span></div>
+  <div class="bn-item" data-page="venues" onclick="showPage('venues')"><i class="fa-solid fa-building"></i><span>Venues</span></div>
+  <div class="bn-item" data-page="vendors" onclick="showPage('vendors')"><i class="fa-solid fa-store"></i><span>Vendors</span></div>
+  <div class="bn-item" data-page="photos" onclick="showPage('photos')"><i class="fa-solid fa-images"></i><span>Photos</span></div>
+  <div class="bn-item" data-page="explore" onclick="showPage('explore')"><i class="fa-solid fa-compass"></i><span>Explore</span></div>
+</nav>
+
+<!-- ══ SEARCH OVERLAY ══ -->
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-box" style="position:relative;">
+    <button class="close-search" id="closeSearch">&times;</button>
+    <input type="text" placeholder="Search venues, photographers, caterers..." id="overlaySearchInput" autofocus>
+    <div class="search-suggestions">
+      <span class="suggestion-chip" onclick="searchNav('Rooftop Venues')">Rooftop Venues</span>
+      <span class="suggestion-chip" onclick="searchNav('Bridal Makeup')">Bridal Makeup</span>
+      <span class="suggestion-chip" onclick="searchNav('Candid Photography')">Candid Photography</span>
+      <span class="suggestion-chip" onclick="searchNav('Wedding Caterers')">Wedding Caterers</span>
+      <span class="suggestion-chip" onclick="searchNav('DJ Events')">DJ Events</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FLOATING ACTION BUTTON ══ -->
+<button class="fab" id="fabBtn" onclick="openM(loginModal)" title="Quick login"><i class="fa-solid fa-bolt"></i></button>
+
+
+<!-- ═══ HOME PAGE ═══ -->
+<div id="page-home" class="page active">
+  <section class="hero">
+    <div class="hero-overlay">
+      <div class="container hero-content">
+        <h1>eventix: Crafting Incredible Public Events,<br>for Everyone.</h1>
+        <p>We Plan, Coordinate, and Execute Unforgettable Experiences with eventix.</p>
+        <div class="main-search">
+          <select><option>All Cities</option><option>Dhaka</option><option>Chittagong</option><option>Khulna</option><option>Rajshahi</option><option>Sylhet</option><option>Rangpur</option><option>Barishal</option><option>Cox's Bazar</option></select>
+          <input type="text" placeholder="Search Venues, Makeup Artists, Photographers...">
+          <button>Get Started</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats-bar" data-reveal>
+    <div class="container stats-grid">
+      <div class="stat-item" data-reveal data-reveal-delay="100"><div class="num">40,000+</div><div class="lbl">Venues Listed</div></div>
+      <div class="stat-item" data-reveal data-reveal-delay="200"><div class="num">3,800+</div><div class="lbl">Verified Vendors</div></div>
+      <div class="stat-item" data-reveal data-reveal-delay="300"><div class="num">1.2M+</div><div class="lbl">Happy Couples</div></div>
+      <div class="stat-item" data-reveal data-reveal-delay="400"><div class="num">150+</div><div class="lbl">Cities Covered</div></div>
+      <div class="stat-item" data-reveal data-reveal-delay="500"><div class="num">4.8★</div><div class="lbl">Average Rating</div></div>
+    </div>
+  </div>
+
+  <section class="container section-padding">
+    <h2 class="section-title" data-reveal>Event Categories</h2>
+    <p class="section-sub">Find the perfect service for every celebration</p>
+    <div class="category-grid">
+      <div class="cat-card blue-bg" onclick="showPage('venues')"><div class="cat-info"><h3>Venues</h3><p>Banquet halls, resorts &amp; more</p></div><img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=150" alt="Venues"></div>
+      <div class="cat-card orange-bg" onclick="showPage('vendors')"><div class="cat-info"><h3>Photographers</h3><p>Candid, Traditional...</p></div><img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&q=80&w=150" alt="Photographers"></div>
+      <div class="cat-card pink-bg" onclick="showPage('vendors')"><div class="cat-info"><h3>Makeup Artists</h3><p>Bridal, Party...</p></div><img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=150" alt="Makeup"></div>
+      <div class="cat-card green-bg" onclick="showPage('vendors')"><div class="cat-info"><h3>Decorators</h3><p>Floral, Themed, Elegant</p></div><img src="https://images.unsplash.com/photo-1478146522997-6f2d0285a219?auto=format&fit=crop&q=80&w=150" alt="Decor"></div>
+      <div class="cat-card purple-bg" onclick="showPage('vendors')"><div class="cat-info"><h3>Caterers</h3><p>Multi-cuisine, Live counters</p></div><img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=150" alt="Catering"></div>
+      <div class="cat-card yellow-bg" onclick="showPage('vendors')"><div class="cat-info"><h3>DJs &amp; Music</h3><p>Live bands, Sound systems</p></div><img src="https://images.unsplash.com/photo-1501386761578-eaa54b07c8e5?auto=format&fit=crop&q=80&w=150" alt="Music"></div>
+    </div>
+  </section>
+
+  <section style="background:#fafafa;padding:60px 0">
+    <div class="container">
+      <h2 class="section-title" data-reveal style="text-align:center">How Eventix Works</h2>
+      <p class="section-sub" style="text-align:center">Plan your perfect event in 4 simple steps</p>
+      <div class="steps-grid">
+        <div class="step" data-reveal data-reveal-delay="100"><div class="step-num">1</div><div class="step-icon"><i class="fa-solid fa-magnifying-glass"></i></div><h4>Search &amp; Discover</h4><p>Browse thousands of venues and vendors with powerful filters.</p></div>
+        <div class="step" data-reveal data-reveal-delay="200"><div class="step-num">2</div><div class="step-icon"><i class="fa-solid fa-heart"></i></div><h4>Shortlist Favourites</h4><p>Save your favourite picks and compare options side by side.</p></div>
+        <div class="step" data-reveal data-reveal-delay="300"><div class="step-num">3</div><div class="step-icon"><i class="fa-solid fa-message"></i></div><h4>Get Quotes</h4><p>Send enquiries directly and receive personalised quotes instantly.</p></div>
+        <div class="step" data-reveal data-reveal-delay="400"><div class="step-num">4</div><div class="step-icon"><i class="fa-solid fa-calendar-check"></i></div><h4>Book &amp; Celebrate</h4><p>Confirm your bookings and enjoy your perfectly planned event!</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container section-padding">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <div><h2 class="section-title" style="margin-bottom:4px">Handpicked Venues</h2><p class="section-sub" style="margin:0">Curated selections near you</p></div>
+      <a onclick="showPage('venues')" style="color:var(--pink);font-weight:700;font-size:14px;cursor:pointer">View All →</a>
+    </div>
+    <div class="venue-grid">
+      <div class="venue-card"><div class="card-img"><img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=500" alt="Venue"><span class="handpicked-tag"><i class="fa-solid fa-crown"></i> Handpicked</span><button class="wishlist-venue"><i class="fa-regular fa-heart"></i></button></div><div class="card-body"><div class="card-title-row"><h3>Heritage Grand Resort</h3><span class="rating"><i class="fa-solid fa-star"></i> 4.8</span></div><p class="location"><i class="fa-solid fa-location-dot"></i> Gulshan, Dhaka</p><div class="tags"><span>4 Star Hotel</span><span>Banquet</span><span>Garden</span></div><div class="pricing"><div class="price-item"><span class="label">Veg</span><span class="value">৳ 850 <small>/person</small></span></div><div class="price-item"><span class="label">Non-veg</span><span class="value">৳ 1,100 <small>/person</small></span></div></div><div class="capacity"><span><i class="fa-solid fa-users"></i> 100–800 pax</span><span><i class="fa-solid fa-bed"></i> 120 Rooms</span></div></div></div>
+      <div class="venue-card"><div class="card-img"><img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500" alt="Venue"><span class="handpicked-tag"><i class="fa-solid fa-crown"></i> Handpicked</span><button class="wishlist-venue"><i class="fa-regular fa-heart"></i></button></div><div class="card-body"><div class="card-title-row"><h3>Skyline Convention Center</h3><span class="rating"><i class="fa-solid fa-star"></i> 4.6</span></div><p class="location"><i class="fa-solid fa-location-dot"></i> Banani, Dhaka</p><div class="tags"><span>Banquet Hall</span><span>Rooftop</span></div><div class="pricing"><div class="price-item"><span class="label">Rental</span><span class="value">৳ 1,80,000</span></div></div><div class="capacity"><span><i class="fa-solid fa-users"></i> 200–1200 pax</span><span><i class="fa-solid fa-bed"></i> 50 Rooms</span></div></div></div>
+      <div class="venue-card"><div class="card-img"><img src="https://images.unsplash.com/photo-1578774204375-826dc4cf1da2?w=500" alt="Venue"><button class="wishlist-venue"><i class="fa-regular fa-heart"></i></button></div><div class="card-body"><div class="card-title-row"><h3>Garden of Eden Lawns</h3><span class="rating"><i class="fa-solid fa-star"></i> 4.5</span></div><p class="location"><i class="fa-solid fa-location-dot"></i> Uttara, Dhaka</p><div class="tags"><span>Marriage Garden</span><span>Outdoor</span></div><div class="pricing"><div class="price-item"><span class="label">Veg</span><span class="value">৳ 650 <small>/person</small></span></div><div class="price-item"><span class="label">Non-veg</span><span class="value">৳ 850 <small>/person</small></span></div></div><div class="capacity"><span><i class="fa-solid fa-users"></i> 300–2000 pax</span></div></div></div>
+    </div>
+  </section>
+
+  <section style="background:#fafafa;padding:60px 0">
+    <div class="container">
+      <h2 class="section-title" data-reveal style="text-align:center">What Our Clients Say</h2>
+      <p class="section-sub" style="text-align:center;margin-bottom:36px">Real stories from real events</p>
+      <div class="testimonial-grid">
+        <div class="testimonial-card" data-reveal data-reveal-delay="100"><div class="t-stars">★★★★★</div><p class="t-text">"Eventix made our wedding planning a breeze. Found the perfect venue and photographer within days. Every vendor was incredibly professional."</p><div class="t-author"><img class="t-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80" alt=""><div><div class="t-name">Nadia Rahman</div><div class="t-event">Wedding · Dhaka</div></div></div></div>
+        <div class="testimonial-card" data-reveal data-reveal-delay="200"><div class="t-stars">★★★★★</div><p class="t-text">"We organised a corporate gala for 500 guests using Eventix. The platform made vendor coordination so simple. Highly recommended to everyone!"</p><div class="t-author"><img class="t-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80" alt=""><div><div class="t-name">Rafiq Hasan</div><div class="t-event">Corporate Event · Chittagong</div></div></div></div>
+        <div class="testimonial-card" data-reveal data-reveal-delay="300"><div class="t-stars">★★★★☆</div><p class="t-text">"The photo gallery gave us so much inspiration. Our reception décor was absolutely stunning — all ideas came from Eventix's gallery!"</p><div class="t-author"><img class="t-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80" alt=""><div><div class="t-name">Priya Chowdhury</div><div class="t-event">Engagement · Sylhet</div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="app-section">
+    <div class="container app-flex">
+      <div class="app-text" data-reveal="left">
+        <h2>Download the 𝐄𝐯𝐞𝐧𝐭𝐢𝐱 App</h2>
+        <ul class="features">
+          <li><i class="fa-solid fa-circle-check"></i> Shortlist Vendors &amp; Venues</li>
+          <li><i class="fa-solid fa-circle-check"></i> Get Event Inspirations</li>
+          <li><i class="fa-solid fa-circle-check"></i> Real-time Chat with Vendors</li>
+          <li><i class="fa-solid fa-circle-check"></i> Budget Tracker Built-in</li>
+          <li><i class="fa-solid fa-circle-check"></i> Guest List Management</li>
+        </ul>
+        <div class="app-buttons">
+          <div class="store-btn"><i class="fa-brands fa-apple"></i><div class="sb-text"><span>Download on the</span><b>App Store</b></div></div>
+          <div class="store-btn"><i class="fa-brands fa-google-play"></i><div class="sb-text"><span>GET IT ON</span><b>Google Play</b></div></div>
+        </div>
+      </div>
+      <div class="app-image" data-reveal="right"><img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=300" alt="App"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4 style="color:var(--pink);font-style:italic;font-size:20px">𝐄𝐯𝐞𝐧𝐭𝐢𝐱</h4>
+          <p>Your one-stop platform for crafting incredible events across Bangladesh.</p>
+          <p>📧 info@eventix.com<br>📞 +880 1700-000000</p>
+          <div class="social-icons"><i class="fa-brands fa-facebook"></i><i class="fa-brands fa-instagram"></i><i class="fa-brands fa-twitter"></i><i class="fa-brands fa-youtube"></i></div>
+        </div>
+        <div class="footer-col"><h4>Quick Links</h4><ul><li>About Us</li><li>Careers</li><li>Press</li><li>Blog</li><li>Contact Us</li></ul></div>
+        <div class="footer-col"><h4>Event Services</h4><ul><li>Wedding Venues</li><li>Corporate Events</li><li>Birthday Parties</li><li>Anniversary Celebrations</li><li>Engagement Ceremonies</li></ul></div>
+        <div class="footer-col"><h4>Newsletter</h4><p style="font-size:13px;color:#888;margin-bottom:12px">Get event tips, deals &amp; inspiration to your inbox.</p><div class="newsletter"><input type="email" placeholder="Your email address"><button>Subscribe</button></div></div>
+      </div>
+      <div class="footer-bottom"><div class="copyright">&copy; 2026 Eventix. All rights reserved.</div><div class="footer-links"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a><a href="#">Sitemap</a></div></div>
+    </div>
+  </footer>
+</div>
+
+
+<!-- ═══ VENUES PAGE ═══ -->
+<div class="modal-overlay" id="loginModal">
+  <div class="login-card">
+    <div class="login-image"></div>
+    <div class="login-form-container">
+      <span class="close-modal" id="closeModal">&times;</span>
+      <div class="heart-logo">❤️</div>
+      <h2 class="brand-name">Eventix</h2>
+      <p style="color:#aaa;font-size:13px;margin-bottom:18px">Welcome back! Log in to your account.</p>
+      <form>
+        <div class="input-group"><i class="fa-regular fa-envelope"></i><input type="text" placeholder="Email or Phone"></div>
+        <div class="input-group"><i class="fa-solid fa-lock"></i><input type="password" placeholder="Password"><i class="fa-regular fa-eye" style="cursor:pointer;color:#bbb"></i></div>
+        <div class="form-options"><label><input type="checkbox"> Remember me</label><a href="#">Forgot Password?</a></div>
+        <button type="submit" class="btn-login-submit">Log In</button>
+      </form>
+      <div class="divider">OR</div>
+      <button class="social-btn"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="17" alt="G"> Continue with Google</button>
+      <button class="social-btn"><i class="fa-brands fa-apple"></i> Continue with Apple</button>
+      <p class="signup-text">Don't have an account? <a href="#" id="toSignupLink">Sign Up</a></p>
+      <p class="security-text"><i class="fa-solid fa-lock"></i> Your data is safe &amp; protected</p>
+    </div>
+  </div>
+</div>
+
+<!-- SIGNUP MODAL -->
+<div class="modal-overlay" id="signupModal">
+  <div class="login-card">
+    <div class="login-image" style="background-image:url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=800');background-size:cover;background-position:center"></div>
+    <div class="login-form-container">
+      <span class="close-modal" id="closeSignup">&times;</span>
+      <div class="heart-logo">❤️</div>
+      <h2 class="brand-name">Eventix</h2>
+      <p style="color:#aaa;font-size:13px;margin-bottom:14px">Create your free account today.</p>
+      <form>
+        <div class="name-row"><div class="input-group"><i class="fa-regular fa-user"></i><input type="text" placeholder="First Name"></div><div class="input-group"><i class="fa-regular fa-user"></i><input type="text" placeholder="Last Name"></div></div>
+        <div class="input-group"><i class="fa-regular fa-envelope"></i><input type="email" placeholder="Email"></div>
+        <div class="input-group"><i class="fa-solid fa-lock"></i><input type="password" placeholder="Password"><i class="fa-regular fa-eye" style="cursor:pointer;color:#bbb"></i></div>
+        <button type="submit" class="btn-login-submit">Create Account</button>
+      </form>
+      <div class="divider">or</div>
+      <div class="social-login-row">
+        <button class="social-btn"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="16" alt="G"> Google</button>
+        <button class="social-btn apple-black"><i class="fa-brands fa-apple"></i> Apple</button>
+      </div>
+      <p class="signup-text">Already have an account? <a href="#" id="toLogin">Log In</a></p>
+      <p class="security-text"><i class="fa-solid fa-lock"></i> Your data is safe &amp; protected</p>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="static-data.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
