@@ -15,7 +15,7 @@ function VendorDetail() {
   const [similar, setSimilar] = useState<any[]>([]);
   useEffect(() => {
     setLoading(true);
-    loadVendorById(id).then((vv) => { setV(vv); if (vv) loadSimilarVendors({ city: vv.city, category: vv.category, excludeId: vv.id, limit: 4 }).then(setSimilar); }).finally(() => setLoading(false));
+    loadVendorById(id).then((vv: any) => { setV(vv); if (vv) loadSimilarVendors({ city: vv.city ?? undefined, category: vv.category ?? undefined, excludeId: vv.id, limit: 4 }).then(setSimilar); }).finally(() => setLoading(false));
   }, [id]);
   if (loading) return <div className="container section-padding">Loading…</div>;
   if (!v) return <div className="container section-padding"><h2>Vendor not found</h2><Link to="/vendors">← Back</Link></div>;
