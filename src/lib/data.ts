@@ -214,10 +214,11 @@ export async function listWishlist() {
 }
 export async function toggleWishlist(target_type: string, target_id: string) {
   const u = await getUser(); if (!u) throw new Error("not_authenticated");
+  const tt = target_type as "venue" | "vendor";
   const { data: existing } = await supabase.from("wishlist_items").select("id")
-    .eq("user_id", u.id).eq("target_type", target_type).eq("target_id", target_id).maybeSingle();
-  if (existing) { await supabase.from("wishlist_items").delete().eq("id", existing.id); return false; }
-  const { error } = await supabase.from("wishlist_items").insert({ user_id: u.id, target_type, target_id });
+    .eq("user_id", u.id).eq("target_type", tt).eq("target_id", target_id).maybeSingle();
+  if (existing) { await supabase.from("wishlist_items").delete().eq("id", (existing as any).id); return false; }
+  const { error } = await supabase.from("wishlist_items").insert({ user_id: u.id, target_type: tt, target_id });
   if (error) throw error;
   return true;
 }
@@ -226,14 +227,20 @@ export async function toggleWishlist(target_type: string, target_id: string) {
 export async function listReviews(target_type: string, target_id: string) {
   const { data, error } = await supabase.from("reviews")
     .select("id,rating,comment,created_at,user_id")
-    .eq("target_type", target_type).eq("target_id", target_id)
+    .eq("target_type", target_type as "venue" | "vendor").eq("target_id", target_id)
     .order("created_at", { ascending: false }).limit(20);
   if (error) throw error;
   return data || [];
 }
 export async function submitReview(p: { target_type: string; target_id: string; rating: number; comment: string }) {
   const u = await getUser(); if (!u) throw new Error("not_authenticated");
-  const { error } = await supabase.from("reviews").insert({ user_id: u.id, ...p });
+  const { error } = await supabase.from("reviews").insert({
+    user_id: u.id,
+    target_type: p.target_type as "venue" | "vendor",
+    target_id: p.target_id,
+    rating: p.rating,
+    comment: p.comment,
+  });
   if (error) throw error;
 }
 
@@ -247,16 +254,17 @@ export async function submitEnquiry(payload: any) {
 // ── cart ──
 export async function addToCart(p: { target_type: string; target_id: string; quantity?: number; meta?: any }) {
   const u = await getUser(); if (!u) throw new Error("not_authenticated");
+  const tt = p.target_type as "venue" | "vendor";
   const quantity = p.quantity ?? 1;
   const { data: existing } = await supabase.from("cart_items").select("id,quantity")
-    .eq("user_id", u.id).eq("target_type", p.target_type).eq("target_id", p.target_id).maybeSingle();
+    .eq("user_id", u.id).eq("target_type", tt).eq("target_id", p.target_id).maybeSingle();
   if (existing) {
     const { error } = await supabase.from("cart_items")
-      .update({ quantity: existing.quantity + quantity, meta: p.meta || {} }).eq("id", existing.id);
+      .update({ quantity: (existing as any).quantity + quantity, meta: p.meta || {} }).eq("id", (existing as any).id);
     if (error) throw error;
   } else {
     const { error } = await supabase.from("cart_items").insert({
-      user_id: u.id, target_type: p.target_type, target_id: p.target_id, quantity, meta: p.meta || {},
+      user_id: u.id, target_type: tt, target_id: p.target_id, quantity, meta: p.meta || {},
     });
     if (error) throw error;
   }
