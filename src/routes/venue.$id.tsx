@@ -18,7 +18,7 @@ function VenueDetail() {
     setLoading(true);
     loadVenueById(id).then((vv) => {
       setV(vv);
-      if (vv) loadSimilarVenues({ city: vv.city, excludeId: vv.id, limit: 4 }).then(setSimilar);
+      if (vv) loadSimilarVenues({ city: vv.city ?? undefined, excludeId: vv.id, limit: 4 }).then(setSimilar);
     }).finally(() => setLoading(false));
   }, [id]);
 
