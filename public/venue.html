@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eventix – Venue Details</title>
+  <meta name="description" content="View venue details, photos, pricing, and reviews. Send an enquiry directly to the host.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="venues">
+
+<!-- NAVBAR (compact) -->
+<header class="navbar" id="main-nav">
+  <div class="container nav-container">
+    <div class="nav-left">
+      <div class="logo" onclick="showPage('home')">𝐄𝐯𝐞𝐧𝐭𝐢𝐱</div>
+      <ul class="nav-menu">
+        <li><a onclick="showPage('venues')" class="nav-link active" data-page="venues">Venues</a></li>
+        <li><a onclick="showPage('vendors')" class="nav-link" data-page="vendors">Vendors</a></li>
+        <li><a onclick="showPage('photos')" class="nav-link" data-page="photos">Photos</a></li>
+        <li><a onclick="showPage('explore')" class="nav-link" data-page="explore">Explore Events</a></li>
+      </ul>
+    </div>
+    <div class="nav-right">
+      <i class="fa-solid fa-magnifying-glass search-icon" id="searchToggle"></i>
+      <button class="btn-primary" id="navLoginBtn">Log In</button>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main class="vd-wrap" id="vdRoot">
+  <!-- Loading skeleton (replaced once data arrives) -->
+  <div id="vdLoading">
+    <div class="vd-skeleton" style="height:18px;width:280px;margin-bottom:18px;"></div>
+    <div class="vd-skeleton" style="height:368px;margin-bottom:22px;"></div>
+    <div class="vd-skeleton" style="height:30px;width:340px;margin-bottom:10px;"></div>
+    <div class="vd-skeleton" style="height:14px;width:240px;"></div>
+  </div>
+
+  <!-- Not-found state -->
+  <div id="vdNotFound" style="display:none;text-align:center;padding:80px 20px;">
+    <i class="fa-regular fa-face-frown" style="font-size:54px;color:#ccc;"></i>
+    <h2 style="margin:16px 0 8px;">Venue not found</h2>
+    <p style="color:#888;margin-bottom:20px;">The venue you’re looking for doesn’t exist or has been removed.</p>
+    <a href="venues.html" class="btn-primary" style="display:inline-block;text-decoration:none;">Back to Venues</a>
+  </div>
+
+  <!-- Real content -->
+  <div id="vdContent" style="display:none;">
+    <nav class="vd-breadcrumb">
+      <a href="index.html">Home</a><span class="sep">›</span>
+      <a href="venues.html">Wedding Venues</a><span class="sep">›</span>
+      <span class="current" id="vdCrumb"></span>
+    </nav>
+
+    <div class="vd-gallery" id="vdGallery"></div>
+
+    <div class="vd-header">
+      <div>
+        <h1 id="vdName"></h1>
+        <div class="vd-loc"><i class="fa-solid fa-location-dot"></i><span id="vdLoc"></span></div>
+      </div>
+      <div class="vd-header-meta">
+        <span class="rating"><i class="fa-solid fa-star"></i> <span id="vdRating">—</span></span>
+        <span class="vd-revcount"><span id="vdRevCount">0</span> reviews</span>
+        <button class="vd-icon-btn" id="vdFav" title="Save"><i class="fa-regular fa-heart"></i></button>
+        <button class="vd-icon-btn" id="vdShare" title="Share"><i class="fa-solid fa-share-nodes"></i></button>
+      </div>
+    </div>
+
+    <div class="vd-quickinfo" id="vdQuickInfo"></div>
+
+    <div class="vd-cols">
+      <div>
+        <div class="vd-tabs" id="vdTabs">
+          <button class="vd-tab active" data-tab="info">Info</button>
+          <button class="vd-tab" data-tab="photos">Photos</button>
+          <button class="vd-tab" data-tab="about">About</button>
+          <button class="vd-tab" data-tab="reviews">Reviews</button>
+          <button class="vd-tab" data-tab="faqs">FAQs</button>
+        </div>
+
+        <section class="vd-section" id="sec-info">
+          <h2>Overview</h2>
+          <p id="vdShortDesc"></p>
+          <div class="vd-chips" id="vdChips"></div>
+        </section>
+
+        <section class="vd-section" id="sec-photos">
+          <h2>Photos</h2>
+          <div class="vd-photos-grid" id="vdPhotos"></div>
+        </section>
+
+        <section class="vd-section" id="sec-about">
+          <h2>About this venue</h2>
+          <p id="vdLongDesc"></p>
+          <h3 style="font-size:15px;margin:18px 0 10px;color:#222;">Amenities</h3>
+          <div class="vd-amenities" id="vdAmenities"></div>
+          <h3 style="font-size:15px;margin:22px 0 10px;color:#222;">Policies</h3>
+          <ul class="vd-policies" id="vdPolicies"></ul>
+        </section>
+
+        <section class="vd-section" id="sec-reviews">
+          <h2>Reviews</h2>
+          <div class="vd-rev-summary">
+            <div>
+              <div class="vd-rev-big" id="vdRevBig">0.0</div>
+              <div style="font-size:12px;color:#888;text-align:center;">out of 5</div>
+            </div>
+            <div class="vd-rev-bars" id="vdRevBars"></div>
+          </div>
+          <div id="vdReviewList"></div>
+          <button class="vd-btn vd-btn-outline" id="vdWriteReview" style="margin-top:14px;">Write a review</button>
+        </section>
+
+        <section class="vd-section" id="sec-faqs">
+          <h2>FAQs</h2>
+          <div id="vdFaqs"></div>
+        </section>
+
+        <section class="vd-section" style="border-bottom:none;">
+          <h2>Browse similar venues</h2>
+          <div class="vd-similar venue-grid" id="vdSimilar"></div>
+        </section>
+      </div>
+
+      <aside class="vd-side">
+        <div class="vd-card">
+          <div class="vd-price-label">Starting price</div>
+          <div class="vd-price" id="vdPrice">—</div>
+
+          <div class="vd-cta-row">
+            <button class="vd-btn vd-btn-outline" id="vdMsgBtn">Send Message</button>
+            <button class="vd-btn vd-btn-primary" id="vdContactBtn">View Contact</button>
+          </div>
+
+          <form class="vd-form" id="vdForm">
+            <h4>Check Availability &amp; Prices</h4>
+            <div class="vd-row">
+              <div class="vd-field">
+                <label>Event date</label>
+                <input type="date" name="event_date" required>
+              </div>
+              <div class="vd-field">
+                <label>Guests</label>
+                <input type="number" name="guest_count" min="1" placeholder="e.g. 300" required>
+              </div>
+            </div>
+            <div class="vd-field">
+              <label>Function type</label>
+              <select name="function_type" required>
+                <option value="">Select…</option>
+                <option>Wedding</option>
+                <option>Holud</option>
+                <option>Reception</option>
+                <option>Engagement</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="vd-field">
+              <label>Your name</label>
+              <input type="text" name="name" required>
+            </div>
+            <div class="vd-row">
+              <div class="vd-field">
+                <label>Phone</label>
+                <input type="tel" name="phone" required>
+              </div>
+              <div class="vd-field">
+                <label>Email</label>
+                <input type="email" name="email" required>
+              </div>
+            </div>
+            <button type="submit" class="vd-submit">Check Availability &amp; Prices</button>
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<!-- Mobile sticky CTA -->
+<div class="vd-mobile-bar">
+  <button class="vd-btn vd-btn-outline" onclick="document.getElementById('vdMsgBtn')?.click()">Message</button>
+  <button class="vd-btn vd-btn-primary" onclick="document.querySelector('.vd-form')?.scrollIntoView({behavior:'smooth'})">Check Availability</button>
+</div>
+
+<!-- Lightbox -->
+<div class="vd-lightbox" id="vdLightbox">
+  <button class="vl-close" id="vlClose">&times;</button>
+  <button class="vl-nav vl-prev" id="vlPrev"><i class="fa-solid fa-chevron-left"></i></button>
+  <img id="vlImg" alt="">
+  <button class="vl-nav vl-next" id="vlNext"><i class="fa-solid fa-chevron-right"></i></button>
+</div>
+
+<!-- Login modal (reused) -->
+<div class="modal-overlay" id="loginModal">
+  <div class="login-card">
+    <div class="login-image"></div>
+    <div class="login-form-container">
+      <span class="close-modal" id="closeModal">&times;</span>
+      <div class="heart-logo">❤️</div>
+      <h2 class="brand-name">Eventix</h2>
+      <p style="color:#aaa;font-size:13px;margin-bottom:18px">Welcome back! Log in to your account.</p>
+      <form>
+        <div class="input-group"><i class="fa-regular fa-envelope"></i><input type="text" placeholder="Email or Phone"></div>
+        <div class="input-group"><i class="fa-solid fa-lock"></i><input type="password" placeholder="Password"></div>
+        <button type="submit" class="btn-login-submit">Log In</button>
+      </form>
+      <div class="divider">OR</div>
+      <button class="social-btn"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="17" alt="G"> Continue with Google</button>
+      <p class="signup-text">Don't have an account? <a href="#" id="toSignupLink">Sign Up</a></p>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="signupModal">
+  <div class="login-card">
+    <div class="login-image"></div>
+    <div class="login-form-container">
+      <span class="close-modal" id="closeSignup">&times;</span>
+      <h2 class="brand-name">Eventix</h2>
+      <form>
+        <div class="input-group"><input type="text" placeholder="First Name"></div>
+        <div class="input-group"><input type="text" placeholder="Last Name"></div>
+        <div class="input-group"><input type="email" placeholder="Email"></div>
+        <div class="input-group"><input type="password" placeholder="Password"></div>
+        <button type="submit" class="btn-login-submit">Create Account</button>
+      </form>
+      <p class="signup-text">Already have an account? <a href="#" id="toLogin">Log In</a></p>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="static-data.js"></script>
+<script src="app.js"></script>
+<script src="venue.js"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Bookings – Eventix</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="my-bookings">
+<header class="navbar" id="main-nav">
+  <div class="container nav-container">
+    <div class="nav-left"><div class="logo" onclick="location.href='index.html'">𝐄𝐯𝐞𝐧𝐭𝐢𝐱</div></div>
+    <div class="nav-right"><button class="btn-primary" id="navLoginBtn">Log In</button></div>
+  </div>
+</header>
+<main class="bk-wrap">
+  <div class="bk-container">
+    <h1 class="bk-title"><i class="fa-solid fa-calendar-check"></i> My Bookings</h1>
+    <div id="mbNew" style="display:none;" class="bk-card bk-success"><i class="fa-solid fa-circle-check"></i> Booking placed! Follow the payment instructions below to confirm.</div>
+    <div id="mbLoading" class="bk-card">Loading…</div>
+    <div id="mbEmpty" class="bk-card" style="display:none;text-align:center;padding:40px 20px;"><h3>No bookings yet</h3><a href="venues.html" class="bk-btn bk-btn-primary">Browse Venues</a></div>
+    <div id="mbList"></div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="static-data.js"></script>
+<script src="nav-extras.js"></script>
+<script src="my-bookings.js"></script>
+</body></html>

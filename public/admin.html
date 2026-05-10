@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – Eventix</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="admin">
+<header class="navbar"><div class="container nav-container">
+  <div class="nav-left"><div class="logo" onclick="location.href='index.html'">𝐄𝐯𝐞𝐧𝐭𝐢𝐱 <span style="font-size:13px;color:#b91c1c;">Admin</span></div></div>
+  <div class="nav-right"><button class="btn-primary" id="navLoginBtn">Log In</button></div>
+</div></header>
+<main class="bk-wrap">
+  <div class="bk-container">
+    <div id="adGuard" class="bk-card" style="display:none;">You must be an admin to view this page.</div>
+    <div id="adApp" style="display:none;">
+      <div class="ad-tabs">
+        <button class="ad-tab active" data-tab="bookings">Bookings</button>
+        <button class="ad-tab" data-tab="enquiries">Enquiries</button>
+        <button class="ad-tab" data-tab="venues">Venues</button>
+        <button class="ad-tab" data-tab="vendors">Vendors</button>
+        <button class="ad-tab" data-tab="albums">Albums</button>
+        <button class="ad-tab" data-tab="users">Users</button>
+        <button class="ad-tab" data-tab="settings">Settings</button>
+      </div>
+      <div id="adBody" class="bk-card">Loading…</div>
+    </div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="static-data.js"></script>
+<script src="nav-extras.js"></script>
+<script src="admin.js"></script>
+</body></html>

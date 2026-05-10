@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout – Eventix</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="checkout">
+<header class="navbar" id="main-nav">
+  <div class="container nav-container">
+    <div class="nav-left">
+      <div class="logo" onclick="location.href='index.html'">𝐄𝐯𝐞𝐧𝐭𝐢𝐱</div>
+    </div>
+    <div class="nav-right">
+      <button class="btn-primary" id="navLoginBtn">Log In</button>
+    </div>
+  </div>
+</header>
+
+<main class="bk-wrap">
+  <div class="bk-container">
+    <h1 class="bk-title"><i class="fa-solid fa-receipt"></i> Checkout</h1>
+    <div id="coLoading" class="bk-card">Loading…</div>
+    <div id="coEmpty" class="bk-card" style="display:none;text-align:center;padding:40px 20px;">
+      <h3>Your cart is empty</h3>
+      <a href="venues.html" class="bk-btn bk-btn-primary">Browse Venues</a>
+    </div>
+
+    <form id="coForm" class="bk-grid" style="display:none;">
+      <div>
+        <div class="bk-card">
+          <h3>Event Details</h3>
+          <div class="bk-field"><label>Event date *</label><input name="event_date" type="date" required></div>
+          <div class="bk-row-2">
+            <div class="bk-field"><label>Guest count *</label><input name="guest_count" type="number" min="1" required></div>
+            <div class="bk-field"><label>Contact phone *</label><input name="contact_phone" type="tel" required placeholder="01XXXXXXXXX"></div>
+          </div>
+          <div class="bk-field"><label>Notes (optional)</label><textarea name="notes" rows="3" placeholder="Anything we should know about your event"></textarea></div>
+        </div>
+
+        <div class="bk-card">
+          <h3>Payment Method</h3>
+          <div class="bk-pay-grid">
+            <label class="bk-pay-opt"><input type="radio" name="payment_method" value="bkash" required><div><div class="bk-pay-name">bKash</div><div class="bk-pay-sub">Mobile</div></div></label>
+            <label class="bk-pay-opt"><input type="radio" name="payment_method" value="nagad"><div><div class="bk-pay-name">Nagad</div><div class="bk-pay-sub">Mobile</div></div></label>
+            <label class="bk-pay-opt"><input type="radio" name="payment_method" value="bank"><div><div class="bk-pay-name">Bank Transfer</div><div class="bk-pay-sub">NEFT/RTGS</div></div></label>
+            <label class="bk-pay-opt"><input type="radio" name="payment_method" value="cash"><div><div class="bk-pay-name">Cash</div><div class="bk-pay-sub">In-person</div></div></label>
+          </div>
+
+          <h3 style="margin-top:24px;">Pay Amount</h3>
+          <div class="bk-pay-grid">
+            <label class="bk-pay-opt"><input type="radio" name="payment_type" value="deposit" checked><div><div class="bk-pay-name">Pay 20% deposit</div><div class="bk-pay-sub" id="optDepositAmt">৳ 0</div></div></label>
+            <label class="bk-pay-opt"><input type="radio" name="payment_type" value="full"><div><div class="bk-pay-name">Pay in full</div><div class="bk-pay-sub" id="optFullAmt">৳ 0</div></div></label>
+          </div>
+        </div>
+
+        <div class="bk-card" id="payInstructions" style="display:none;">
+          <h3>Payment Instructions</h3>
+          <div id="payInstrBody"></div>
+        </div>
+      </div>
+
+      <aside class="bk-summary">
+        <h3>Order Summary</h3>
+        <div id="coItems"></div>
+        <hr>
+        <div class="bk-row"><span>Subtotal</span><span id="coSubtotal">৳ 0</span></div>
+        <div class="bk-row bk-total"><span>Total</span><span id="coTotal">৳ 0</span></div>
+        <div class="bk-row" style="color:#0a7c2f;font-weight:600;"><span>Pay now</span><span id="coPayNow">৳ 0</span></div>
+        <button type="submit" class="bk-btn bk-btn-primary" style="width:100%;justify-content:center;margin-top:14px;">Place Booking</button>
+        <p class="bk-hint" style="margin-top:10px;">Booking is created with status <b>Pending</b>. Upload payment proof from My Bookings to confirm.</p>
+      </aside>
+    </form>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="static-data.js"></script>
+<script src="nav-extras.js"></script>
+<script src="checkout.js"></script>
+</body>
+</html>
