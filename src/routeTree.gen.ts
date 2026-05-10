@@ -22,6 +22,7 @@ import { Route as VendorIdRouteImport } from './routes/vendor.$id'
 import { Route as AdminVenuesRouteImport } from './routes/admin.venues'
 import { Route as AdminVendorsRouteImport } from './routes/admin.vendors'
 import { Route as AdminListingsRouteImport } from './routes/admin.listings'
+import { Route as AdminAlbumsRouteImport } from './routes/admin.albums'
 
 const VenuesRoute = VenuesRouteImport.update({
   id: '/venues',
@@ -88,6 +89,11 @@ const AdminListingsRoute = AdminListingsRouteImport.update({
   path: '/listings',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAlbumsRoute = AdminAlbumsRouteImport.update({
+  id: '/albums',
+  path: '/albums',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/my-bookings': typeof MyBookingsRoute
   '/photos': typeof PhotosRoute
   '/venues': typeof VenuesRoute
+  '/admin/albums': typeof AdminAlbumsRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/vendors': typeof AdminVendorsRoute
   '/admin/venues': typeof AdminVenuesRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/my-bookings': typeof MyBookingsRoute
   '/photos': typeof PhotosRoute
   '/venues': typeof VenuesRoute
+  '/admin/albums': typeof AdminAlbumsRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/vendors': typeof AdminVendorsRoute
   '/admin/venues': typeof AdminVenuesRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/my-bookings': typeof MyBookingsRoute
   '/photos': typeof PhotosRoute
   '/venues': typeof VenuesRoute
+  '/admin/albums': typeof AdminAlbumsRoute
   '/admin/listings': typeof AdminListingsRoute
   '/admin/vendors': typeof AdminVendorsRoute
   '/admin/venues': typeof AdminVenuesRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/my-bookings'
     | '/photos'
     | '/venues'
+    | '/admin/albums'
     | '/admin/listings'
     | '/admin/vendors'
     | '/admin/venues'
@@ -158,6 +168,7 @@ export interface FileRouteTypes {
     | '/my-bookings'
     | '/photos'
     | '/venues'
+    | '/admin/albums'
     | '/admin/listings'
     | '/admin/vendors'
     | '/admin/venues'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/my-bookings'
     | '/photos'
     | '/venues'
+    | '/admin/albums'
     | '/admin/listings'
     | '/admin/vendors'
     | '/admin/venues'
@@ -286,10 +298,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminListingsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/albums': {
+      id: '/admin/albums'
+      path: '/albums'
+      fullPath: '/admin/albums'
+      preLoaderRoute: typeof AdminAlbumsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminAlbumsRoute: typeof AdminAlbumsRoute
   AdminListingsRoute: typeof AdminListingsRoute
   AdminVendorsRoute: typeof AdminVendorsRoute
   AdminVenuesRoute: typeof AdminVenuesRoute
@@ -297,6 +317,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAlbumsRoute: AdminAlbumsRoute,
   AdminListingsRoute: AdminListingsRoute,
   AdminVendorsRoute: AdminVendorsRoute,
   AdminVenuesRoute: AdminVenuesRoute,
