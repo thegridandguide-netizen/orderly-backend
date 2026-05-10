@@ -339,7 +339,7 @@ export async function createBooking(p: {
   if (error) throw error;
   const lineItems = p.items.map((it) => ({
     booking_id: booking.id,
-    target_type: it.target_type, target_id: it.target_id,
+    target_type: it.target_type as "venue" | "vendor", target_id: it.target_id,
     title_snapshot: it.title, image_snapshot: it.image,
     unit_price: it.unit_price, quantity: it.quantity || 1,
     line_total: (Number(it.unit_price) || 0) * (it.quantity || 1),
@@ -363,13 +363,13 @@ export async function listMyBookings() {
 // ── admin ──
 export async function isAdmin() {
   const u = await getUser(); if (!u) return false;
-  const { data } = await supabase.from("profiles").select("role").eq("id", u.id).maybeSingle();
-  return (data as any)?.role === "admin";
+  const { data } = await supabase.from("user_roles").select("role").eq("user_id", u.id).eq("role", "admin").maybeSingle();
+  return !!data;
 }
 export async function adminListBookings(opts: { status?: string; limit?: number } = {}) {
   let q = supabase.from("bookings").select("*, booking_items(*), payment_proofs(*)")
     .order("created_at", { ascending: false }).limit(opts.limit ?? 100);
-  if (opts.status) q = q.eq("status", opts.status);
+  if (opts.status) q = q.eq("status", opts.status as any);
   const { data, error } = await q;
   if (error) throw error;
   return data || [];
