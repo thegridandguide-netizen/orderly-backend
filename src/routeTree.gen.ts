@@ -21,6 +21,7 @@ import { Route as VenueIdRouteImport } from './routes/venue.$id'
 import { Route as VendorIdRouteImport } from './routes/vendor.$id'
 import { Route as AdminVenuesRouteImport } from './routes/admin.venues'
 import { Route as AdminVendorsRouteImport } from './routes/admin.vendors'
+import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
 import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
 import { Route as AdminPhotosRouteImport } from './routes/admin.photos'
 import { Route as AdminListingsRouteImport } from './routes/admin.listings'
@@ -88,6 +89,11 @@ const AdminVendorsRoute = AdminVendorsRouteImport.update({
   path: '/vendors',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPricingRoute = AdminPricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
@@ -133,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/admin/listings': typeof AdminListingsRoute
   '/admin/photos': typeof AdminPhotosRoute
   '/admin/pricing': typeof AdminPricingRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/vendors': typeof AdminVendorsRoute
   '/admin/venues': typeof AdminVenuesRoute
   '/vendor/$id': typeof VendorIdRoute
@@ -152,6 +159,7 @@ export interface FileRoutesByTo {
   '/admin/listings': typeof AdminListingsRoute
   '/admin/photos': typeof AdminPhotosRoute
   '/admin/pricing': typeof AdminPricingRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/vendors': typeof AdminVendorsRoute
   '/admin/venues': typeof AdminVenuesRoute
   '/vendor/$id': typeof VendorIdRoute
@@ -173,6 +181,7 @@ export interface FileRoutesById {
   '/admin/listings': typeof AdminListingsRoute
   '/admin/photos': typeof AdminPhotosRoute
   '/admin/pricing': typeof AdminPricingRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/vendors': typeof AdminVendorsRoute
   '/admin/venues': typeof AdminVenuesRoute
   '/vendor/$id': typeof VendorIdRoute
@@ -195,6 +204,7 @@ export interface FileRouteTypes {
     | '/admin/listings'
     | '/admin/photos'
     | '/admin/pricing'
+    | '/admin/transactions'
     | '/admin/vendors'
     | '/admin/venues'
     | '/vendor/$id'
@@ -214,6 +224,7 @@ export interface FileRouteTypes {
     | '/admin/listings'
     | '/admin/photos'
     | '/admin/pricing'
+    | '/admin/transactions'
     | '/admin/vendors'
     | '/admin/venues'
     | '/vendor/$id'
@@ -234,6 +245,7 @@ export interface FileRouteTypes {
     | '/admin/listings'
     | '/admin/photos'
     | '/admin/pricing'
+    | '/admin/transactions'
     | '/admin/vendors'
     | '/admin/venues'
     | '/vendor/$id'
@@ -339,6 +351,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminVendorsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/transactions': {
+      id: '/admin/transactions'
+      path: '/transactions'
+      fullPath: '/admin/transactions'
+      preLoaderRoute: typeof AdminTransactionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/pricing': {
       id: '/admin/pricing'
       path: '/pricing'
@@ -391,6 +410,7 @@ interface AdminRouteChildren {
   AdminListingsRoute: typeof AdminListingsRoute
   AdminPhotosRoute: typeof AdminPhotosRoute
   AdminPricingRoute: typeof AdminPricingRoute
+  AdminTransactionsRoute: typeof AdminTransactionsRoute
   AdminVendorsRoute: typeof AdminVendorsRoute
   AdminVenuesRoute: typeof AdminVenuesRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -403,6 +423,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminListingsRoute: AdminListingsRoute,
   AdminPhotosRoute: AdminPhotosRoute,
   AdminPricingRoute: AdminPricingRoute,
+  AdminTransactionsRoute: AdminTransactionsRoute,
   AdminVendorsRoute: AdminVendorsRoute,
   AdminVenuesRoute: AdminVenuesRoute,
   AdminIndexRoute: AdminIndexRoute,
