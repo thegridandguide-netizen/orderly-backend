@@ -11,10 +11,24 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VenuesRouteImport } from './routes/venues'
 import { Route as PhotosRouteImport } from './routes/photos'
+import { Route as MyBookingsRouteImport } from './routes/my-bookings'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as CartRouteImport } from './routes/cart'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as VenueIdRouteImport } from './routes/venue.$id'
 import { Route as VendorIdRouteImport } from './routes/vendor.$id'
+import { Route as AdminVenuesRouteImport } from './routes/admin.venues'
+import { Route as AdminVendorsRouteImport } from './routes/admin.vendors'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
+import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
+import { Route as AdminPhotosRouteImport } from './routes/admin.photos'
+import { Route as AdminListingsRouteImport } from './routes/admin.listings'
+import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
+import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
+import { Route as AdminAlbumsRouteImport } from './routes/admin.albums'
 
 const VenuesRoute = VenuesRouteImport.update({
   id: '/venues',
@@ -26,15 +40,35 @@ const PhotosRoute = PhotosRouteImport.update({
   path: '/photos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MyBookingsRoute = MyBookingsRouteImport.update({
+  id: '/my-bookings',
+  path: '/my-bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const VenueIdRoute = VenueIdRouteImport.update({
   id: '/venue/$id',
@@ -46,56 +80,197 @@ const VendorIdRoute = VendorIdRouteImport.update({
   path: '/vendor/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminVenuesRoute = AdminVenuesRouteImport.update({
+  id: '/venues',
+  path: '/venues',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminVendorsRoute = AdminVendorsRouteImport.update({
+  id: '/vendors',
+  path: '/vendors',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPricingRoute = AdminPricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPhotosRoute = AdminPhotosRouteImport.update({
+  id: '/photos',
+  path: '/photos',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminListingsRoute = AdminListingsRouteImport.update({
+  id: '/listings',
+  path: '/listings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBookingsRoute = AdminBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAlbumsRoute = AdminAlbumsRouteImport.update({
+  id: '/albums',
+  path: '/albums',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/my-bookings': typeof MyBookingsRoute
   '/photos': typeof PhotosRoute
   '/venues': typeof VenuesRoute
+  '/admin/albums': typeof AdminAlbumsRoute
+  '/admin/bookings': typeof AdminBookingsRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/listings': typeof AdminListingsRoute
+  '/admin/photos': typeof AdminPhotosRoute
+  '/admin/pricing': typeof AdminPricingRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/admin/vendors': typeof AdminVendorsRoute
+  '/admin/venues': typeof AdminVenuesRoute
   '/vendor/$id': typeof VendorIdRoute
   '/venue/$id': typeof VenueIdRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/my-bookings': typeof MyBookingsRoute
   '/photos': typeof PhotosRoute
   '/venues': typeof VenuesRoute
+  '/admin/albums': typeof AdminAlbumsRoute
+  '/admin/bookings': typeof AdminBookingsRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/listings': typeof AdminListingsRoute
+  '/admin/photos': typeof AdminPhotosRoute
+  '/admin/pricing': typeof AdminPricingRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/admin/vendors': typeof AdminVendorsRoute
+  '/admin/venues': typeof AdminVenuesRoute
   '/vendor/$id': typeof VendorIdRoute
   '/venue/$id': typeof VenueIdRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/my-bookings': typeof MyBookingsRoute
   '/photos': typeof PhotosRoute
   '/venues': typeof VenuesRoute
+  '/admin/albums': typeof AdminAlbumsRoute
+  '/admin/bookings': typeof AdminBookingsRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/listings': typeof AdminListingsRoute
+  '/admin/photos': typeof AdminPhotosRoute
+  '/admin/pricing': typeof AdminPricingRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/admin/vendors': typeof AdminVendorsRoute
+  '/admin/venues': typeof AdminVenuesRoute
   '/vendor/$id': typeof VendorIdRoute
   '/venue/$id': typeof VenueIdRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
+    | '/cart'
     | '/checkout'
+    | '/my-bookings'
     | '/photos'
     | '/venues'
+    | '/admin/albums'
+    | '/admin/bookings'
+    | '/admin/categories'
+    | '/admin/listings'
+    | '/admin/photos'
+    | '/admin/pricing'
+    | '/admin/transactions'
+    | '/admin/users'
+    | '/admin/vendors'
+    | '/admin/venues'
     | '/vendor/$id'
     | '/venue/$id'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/checkout' | '/photos' | '/venues' | '/vendor/$id' | '/venue/$id'
+  to:
+    | '/'
+    | '/cart'
+    | '/checkout'
+    | '/my-bookings'
+    | '/photos'
+    | '/venues'
+    | '/admin/albums'
+    | '/admin/bookings'
+    | '/admin/categories'
+    | '/admin/listings'
+    | '/admin/photos'
+    | '/admin/pricing'
+    | '/admin/transactions'
+    | '/admin/users'
+    | '/admin/vendors'
+    | '/admin/venues'
+    | '/vendor/$id'
+    | '/venue/$id'
+    | '/admin'
   id:
     | '__root__'
     | '/'
+    | '/admin'
+    | '/cart'
     | '/checkout'
+    | '/my-bookings'
     | '/photos'
     | '/venues'
+    | '/admin/albums'
+    | '/admin/bookings'
+    | '/admin/categories'
+    | '/admin/listings'
+    | '/admin/photos'
+    | '/admin/pricing'
+    | '/admin/transactions'
+    | '/admin/users'
+    | '/admin/vendors'
+    | '/admin/venues'
     | '/vendor/$id'
     | '/venue/$id'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
+  MyBookingsRoute: typeof MyBookingsRoute
   PhotosRoute: typeof PhotosRoute
   VenuesRoute: typeof VenuesRoute
   VendorIdRoute: typeof VendorIdRoute
@@ -118,11 +293,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PhotosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/my-bookings': {
+      id: '/my-bookings'
+      path: '/my-bookings'
+      fullPath: '/my-bookings'
+      preLoaderRoute: typeof MyBookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkout': {
       id: '/checkout'
       path: '/checkout'
       fullPath: '/checkout'
       preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -131,6 +327,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/venue/$id': {
       id: '/venue/$id'
@@ -146,12 +349,115 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VendorIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/venues': {
+      id: '/admin/venues'
+      path: '/venues'
+      fullPath: '/admin/venues'
+      preLoaderRoute: typeof AdminVenuesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/vendors': {
+      id: '/admin/vendors'
+      path: '/vendors'
+      fullPath: '/admin/vendors'
+      preLoaderRoute: typeof AdminVendorsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/transactions': {
+      id: '/admin/transactions'
+      path: '/transactions'
+      fullPath: '/admin/transactions'
+      preLoaderRoute: typeof AdminTransactionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/pricing': {
+      id: '/admin/pricing'
+      path: '/pricing'
+      fullPath: '/admin/pricing'
+      preLoaderRoute: typeof AdminPricingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/photos': {
+      id: '/admin/photos'
+      path: '/photos'
+      fullPath: '/admin/photos'
+      preLoaderRoute: typeof AdminPhotosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/listings': {
+      id: '/admin/listings'
+      path: '/listings'
+      fullPath: '/admin/listings'
+      preLoaderRoute: typeof AdminListingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/categories': {
+      id: '/admin/categories'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AdminCategoriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/bookings': {
+      id: '/admin/bookings'
+      path: '/bookings'
+      fullPath: '/admin/bookings'
+      preLoaderRoute: typeof AdminBookingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/albums': {
+      id: '/admin/albums'
+      path: '/albums'
+      fullPath: '/admin/albums'
+      preLoaderRoute: typeof AdminAlbumsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminAlbumsRoute: typeof AdminAlbumsRoute
+  AdminBookingsRoute: typeof AdminBookingsRoute
+  AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminListingsRoute: typeof AdminListingsRoute
+  AdminPhotosRoute: typeof AdminPhotosRoute
+  AdminPricingRoute: typeof AdminPricingRoute
+  AdminTransactionsRoute: typeof AdminTransactionsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+  AdminVendorsRoute: typeof AdminVendorsRoute
+  AdminVenuesRoute: typeof AdminVenuesRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAlbumsRoute: AdminAlbumsRoute,
+  AdminBookingsRoute: AdminBookingsRoute,
+  AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminListingsRoute: AdminListingsRoute,
+  AdminPhotosRoute: AdminPhotosRoute,
+  AdminPricingRoute: AdminPricingRoute,
+  AdminTransactionsRoute: AdminTransactionsRoute,
+  AdminUsersRoute: AdminUsersRoute,
+  AdminVendorsRoute: AdminVendorsRoute,
+  AdminVenuesRoute: AdminVenuesRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
+  MyBookingsRoute: MyBookingsRoute,
   PhotosRoute: PhotosRoute,
   VenuesRoute: VenuesRoute,
   VendorIdRoute: VendorIdRoute,

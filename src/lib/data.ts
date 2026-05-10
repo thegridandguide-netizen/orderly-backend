@@ -378,3 +378,41 @@ export async function adminUpdateBooking(id: string, patch: any) {
   const { error } = await supabase.from("bookings").update(patch).eq("id", id);
   if (error) throw error;
 }
+// ── admin generic CRUD ──
+export type AdminTable =
+  | "venues" | "vendor_profiles" | "vendor_listings"
+  | "albums" | "photos" | "event_categories"
+  | "pricing_rules" | "bookings" | "transactions"
+  | "user_roles" | "profiles" | "enquiries";
+
+export async function adminList(table: AdminTable, opts: { limit?: number; orderBy?: string; ascending?: boolean } = {}) {
+  const { limit = 200, orderBy = "created_at", ascending = false } = opts;
+  const { data, error } = await supabase.from(table as any).select("*").order(orderBy, { ascending }).limit(limit);
+  if (error) throw error;
+  return data || [];
+}
+export async function adminCreate(table: AdminTable, row: any) {
+  const { data, error } = await supabase.from(table as any).insert(row).select().single();
+  if (error) throw error;
+  return data;
+}
+export async function adminUpdate(table: AdminTable, id: string, patch: any) {
+  const { data, error } = await supabase.from(table as any).update(patch).eq("id", id).select().single();
+  if (error) throw error;
+  return data;
+}
+export async function adminDelete(table: AdminTable, id: string) {
+  const { error } = await supabase.from(table as any).delete().eq("id", id);
+  if (error) throw error;
+}
+export async function adminStats() {
+  const tables: AdminTable[] = ["venues", "vendor_listings", "bookings", "profiles"];
+  const counts: Record<string, number> = {};
+  await Promise.all(tables.map(async (t) => {
+    const { count } = await supabase.from(t as any).select("*", { count: "exact", head: true });
+    counts[t] = count || 0;
+  }));
+  const { data: revenue } = await supabase.from("bookings").select("amount_paid");
+  counts.revenue = (revenue || []).reduce((s: number, b: any) => s + Number(b.amount_paid || 0), 0);
+  return counts;
+}
