@@ -55,8 +55,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </Link>
             {user ? (
               <>
-                <Link to="/my-bookings" className="btn-primary" style={{ padding:"8px 16px", fontSize:13 }}>
-                  My Bookings
+                <Link to="/my-bookings" className="nav-link" style={{ padding: "0 10px", fontWeight: 500 }}>
+                  <i className="fa-solid fa-calendar-check" /> Bookings
+                </Link>
+                <Link to="/profile" className="nav-link" title="My Profile" style={{ padding: "0 10px", fontWeight: 500 }}>
+                  <i className="fa-solid fa-user-circle" /> Profile
                 </Link>
                 <button className="btn-primary" onClick={() => signOut().then(() => location.reload())} style={{ background:"#444" }}>
                   Log Out
