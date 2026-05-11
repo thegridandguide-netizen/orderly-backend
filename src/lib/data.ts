@@ -317,7 +317,45 @@ export async function cartCount() {
   return count || 0;
 }
 
-// ── bookings ──
+// ─────────────────────────────────────────────────────────────────────────────
+// PRICING + ORDERING
+// Flow:  cart_items  →  createBooking()  →  bookings + booking_items + transaction
+// Active pricing_rules (tax / discount / fee) are applied to the cart subtotal
+// at checkout. Admins manage rules in /admin/pricing.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type PricingBreakdownLine = { name: string; rule_type: "tax" | "discount" | "fee"; amount: number };
+
+/** Fetch active pricing rules and compute taxes/discounts/fees for a subtotal.
+ *  `value` is interpreted as a percentage of the subtotal (e.g. value=15 → 15%). */
+export async function computePricing(subtotal: number): Promise<{
+  breakdown: PricingBreakdownLine[]; tax_total: number; discount_total: number;
+  fee_total: number; total: number;
+}> {
+  const now = new Date().toISOString();
+  const { data } = await supabase
+    .from("pricing_rules").select("*").eq("active", true);
+  const rules = (data || []).filter((r: any) => {
+    if (r.starts_at && r.starts_at > now) return false;
+    if (r.ends_at && r.ends_at < now) return false;
+    return true;
+  });
+  let tax_total = 0, discount_total = 0, fee_total = 0;
+  const breakdown: PricingBreakdownLine[] = [];
+  for (const r of rules as any[]) {
+    const amt = Math.round((Number(r.value) || 0) * subtotal / 100);
+    if (!amt) continue;
+    if (r.rule_type === "tax") tax_total += amt;
+    else if (r.rule_type === "discount") discount_total += amt;
+    else if (r.rule_type === "fee") fee_total += amt;
+    breakdown.push({ name: r.name, rule_type: r.rule_type, amount: amt });
+  }
+  const total = subtotal + tax_total + fee_total - discount_total;
+  return { breakdown, tax_total, discount_total, fee_total, total };
+}
+
+/** Create a booking from cart items: inserts booking + booking_items + an
+ *  initiated transaction, then clears the consumed cart rows. */
 export async function createBooking(p: {
   items: Array<CartItem & { cart_id?: string }>;
   event_date?: string; guest_count?: number; contact_phone?: string; notes?: string;
@@ -325,18 +363,33 @@ export async function createBooking(p: {
 }) {
   const u = await getUser(); if (!u) throw new Error("not_authenticated");
   if (!p.items?.length) throw new Error("Cart is empty");
-  const subtotal = p.items.reduce((s, it) => s + (Number(it.unit_price) || 0) * (it.quantity || 1), 0);
-  const total_amount = subtotal;
+
+  // 1. Subtotal from line items
+  const subtotal = p.items.reduce(
+    (s, it) => s + (Number(it.unit_price) || 0) * (it.quantity || 1), 0
+  );
+
+  // 2. Apply active pricing rules (tax/discount/fee)
+  const pr = await computePricing(subtotal);
+  const total_amount = pr.total;
   const deposit_amount = Math.round(total_amount * 0.2);
+  const due_now = (p.payment_type === "full") ? total_amount : deposit_amount;
+
+  // 3. Insert booking header
   const receipt_number = `BK-${new Date().getFullYear()}-${Math.floor(Math.random() * 99999).toString().padStart(5, "0")}`;
   const { data: booking, error } = await supabase.from("bookings").insert({
     user_id: u.id, status: "pending",
-    subtotal, total_amount, deposit_amount, currency: "BDT",
-    event_date: p.event_date, guest_count: p.guest_count, contact_phone: p.contact_phone, notes: p.notes,
-    payment_method: p.payment_method, payment_type: p.payment_type ?? "deposit",
+    subtotal, tax_total: pr.tax_total, discount_total: pr.discount_total,
+    fee_total: pr.fee_total, total_amount, deposit_amount, currency: "BDT",
+    event_date: p.event_date, guest_count: p.guest_count, contact_phone: p.contact_phone,
+    notes: p.notes, payment_method: p.payment_method,
+    payment_type: p.payment_type ?? "deposit",
+    pricing_breakdown: pr.breakdown as any,
     receipt_number,
   }).select().single();
   if (error) throw error;
+
+  // 4. Snapshot line items (so future catalog changes don't mutate history)
   const lineItems = p.items.map((it) => ({
     booking_id: booking.id,
     target_type: it.target_type as "venue" | "vendor", target_id: it.target_id,
@@ -347,9 +400,34 @@ export async function createBooking(p: {
   }));
   const { error: liErr } = await supabase.from("booking_items").insert(lineItems);
   if (liErr) throw liErr;
+
+  // 5. Open a transaction record (status=initiated until admin marks paid)
+  await supabase.from("transactions").insert({
+    booking_id: booking.id, user_id: u.id,
+    gateway: p.payment_method || "manual",
+    status: "initiated", amount: due_now, currency: "BDT",
+  });
+
+  // 6. Clear cart rows that were checked out
   const ids = p.items.map((it: any) => it.cart_id || it.id).filter(Boolean);
   if (ids.length) await supabase.from("cart_items").delete().in("id", ids);
+
   return booking;
+}
+
+/** Admin action: mark a transaction as successful and advance the booking
+ *  to deposit_paid / paid based on the amount paid vs total. */
+export async function adminMarkTransactionPaid(transactionId: string) {
+  const { data: tx, error } = await supabase.from("transactions")
+    .update({ status: "success" }).eq("id", transactionId).select().single();
+  if (error) throw error;
+  const { data: booking } = await supabase.from("bookings")
+    .select("*").eq("id", tx.booking_id).single();
+  if (!booking) return;
+  const amount_paid = Number(booking.amount_paid || 0) + Number(tx.amount || 0);
+  const status: "completed" | "confirmed" =
+    amount_paid >= Number(booking.total_amount) ? "completed" : "confirmed";
+  await supabase.from("bookings").update({ amount_paid, status }).eq("id", booking.id);
 }
 
 export async function listMyBookings() {
@@ -367,12 +445,23 @@ export async function isAdmin() {
   return !!data;
 }
 export async function adminListBookings(opts: { status?: string; limit?: number } = {}) {
-  let q = supabase.from("bookings").select("*, booking_items(*), payment_proofs(*)")
+  // NB: payment_proofs and transactions don't have FK constraints in this
+  // schema, so we fetch transactions separately and stitch them in below.
+  let q = supabase.from("bookings").select("*, booking_items(*)")
     .order("created_at", { ascending: false }).limit(opts.limit ?? 100);
   if (opts.status) q = q.eq("status", opts.status as any);
   const { data, error } = await q;
   if (error) throw error;
-  return data || [];
+  const bookings = data || [];
+  if (!bookings.length) return bookings;
+  const ids = bookings.map((b: any) => b.id);
+  const { data: txs } = await supabase.from("transactions").select("*").in("booking_id", ids);
+  const byBooking = new Map<string, any[]>();
+  (txs || []).forEach((t: any) => {
+    const arr = byBooking.get(t.booking_id) || [];
+    arr.push(t); byBooking.set(t.booking_id, arr);
+  });
+  return bookings.map((b: any) => ({ ...b, transactions: byBooking.get(b.id) || [] }));
 }
 export async function adminUpdateBooking(id: string, patch: any) {
   const { error } = await supabase.from("bookings").update(patch).eq("id", id);

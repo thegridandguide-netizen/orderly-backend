@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { listCart, createBooking, fmtBDT, type CartItem } from "@/lib/data";
+import { listCart, createBooking, computePricing, fmtBDT, type CartItem, type PricingBreakdownLine } from "@/lib/data";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 
@@ -17,12 +17,16 @@ function CheckoutPage() {
   const [payment_method, setMethod] = useState("bkash");
   const [payment_type, setType] = useState<"deposit" | "full">("deposit");
   const [busy, setBusy] = useState(false);
+  const [pricing, setPricing] = useState<{ breakdown: PricingBreakdownLine[]; total: number } | null>(null);
   useEffect(() => { if (ready) listCart().then(setItems); }, [ready, user]);
+  const subtotal = items.reduce((s, it) => s + it.unit_price * it.quantity, 0);
+  // Recompute taxes/discounts/fees whenever the cart subtotal changes.
+  useEffect(() => { if (subtotal) computePricing(subtotal).then(setPricing); }, [subtotal]);
   if (!ready) return <div className="container section-padding">Loading…</div>;
   if (!user) return <div className="container section-padding"><h2>Please log in</h2></div>;
   if (!items.length) return <div className="container section-padding"><h2>Cart is empty</h2><Link to="/venues">Browse →</Link></div>;
-  const subtotal = items.reduce((s, it) => s + it.unit_price * it.quantity, 0);
-  const due = payment_type === "full" ? subtotal : Math.round(subtotal * 0.2);
+  const total = pricing?.total ?? subtotal;
+  const due = payment_type === "full" ? total : Math.round(total * 0.2);
   async function submit(e: React.FormEvent) {
     e.preventDefault(); setBusy(true);
     try {
@@ -47,6 +51,13 @@ function CheckoutPage() {
           {items.map((it) => (<div key={it.id} style={{ display: "flex", justifyContent: "space-between", marginBottom: 8, fontSize: 13 }}><span>{it.title} × {it.quantity}</span><span>{fmtBDT(it.unit_price * it.quantity)}</span></div>))}
           <hr style={{ margin: "14px 0", border: "none", borderTop: "1px solid var(--border)" }} />
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}><span>Subtotal</span><strong>{fmtBDT(subtotal)}</strong></div>
+          {pricing?.breakdown.map((b) => (
+            <div key={b.name} style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, fontSize: 13, color: b.rule_type === "discount" ? "#059669" : "#444" }}>
+              <span>{b.name}</span>
+              <span>{b.rule_type === "discount" ? "−" : ""}{fmtBDT(b.amount)}</span>
+            </div>
+          ))}
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}><span>Total</span><strong>{fmtBDT(total)}</strong></div>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}><span>Due now</span><strong style={{ color: "var(--pink)" }}>{fmtBDT(due)}</strong></div>
           <button type="submit" className="btn-primary" disabled={busy} style={{ width: "100%", padding: 14, borderRadius: 10 }}>{busy ? "Processing…" : "Confirm Booking"}</button>
         </aside>
