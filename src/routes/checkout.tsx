@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { listCart, createBooking, fmtBDT, type CartItem } from "@/lib/data";
+import { listCart, createBooking, computePricing, fmtBDT, type CartItem, type PricingBreakdownLine } from "@/lib/data";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 
