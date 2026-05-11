@@ -425,8 +425,8 @@ export async function adminMarkTransactionPaid(transactionId: string) {
     .select("*").eq("id", tx.booking_id).single();
   if (!booking) return;
   const amount_paid = Number(booking.amount_paid || 0) + Number(tx.amount || 0);
-  const status = amount_paid >= Number(booking.total_amount)
-    ? "paid" : "deposit_paid";
+  const status: "completed" | "confirmed" =
+    amount_paid >= Number(booking.total_amount) ? "completed" : "confirmed";
   await supabase.from("bookings").update({ amount_paid, status }).eq("id", booking.id);
 }
 
