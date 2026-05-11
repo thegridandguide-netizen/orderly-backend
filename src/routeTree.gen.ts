@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VenuesRouteImport } from './routes/venues'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PhotosRouteImport } from './routes/photos'
 import { Route as MyBookingsRouteImport } from './routes/my-bookings'
 import { Route as CheckoutRouteImport } from './routes/checkout'
@@ -33,6 +34,11 @@ import { Route as AdminAlbumsRouteImport } from './routes/admin.albums'
 const VenuesRoute = VenuesRouteImport.update({
   id: '/venues',
   path: '/venues',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PhotosRoute = PhotosRouteImport.update({
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/my-bookings': typeof MyBookingsRoute
   '/photos': typeof PhotosRoute
+  '/profile': typeof ProfileRoute
   '/venues': typeof VenuesRoute
   '/admin/albums': typeof AdminAlbumsRoute
   '/admin/bookings': typeof AdminBookingsRoute
@@ -159,6 +166,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/my-bookings': typeof MyBookingsRoute
   '/photos': typeof PhotosRoute
+  '/profile': typeof ProfileRoute
   '/venues': typeof VenuesRoute
   '/admin/albums': typeof AdminAlbumsRoute
   '/admin/bookings': typeof AdminBookingsRoute
@@ -182,6 +190,7 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/my-bookings': typeof MyBookingsRoute
   '/photos': typeof PhotosRoute
+  '/profile': typeof ProfileRoute
   '/venues': typeof VenuesRoute
   '/admin/albums': typeof AdminAlbumsRoute
   '/admin/bookings': typeof AdminBookingsRoute
@@ -206,6 +215,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/my-bookings'
     | '/photos'
+    | '/profile'
     | '/venues'
     | '/admin/albums'
     | '/admin/bookings'
@@ -227,6 +237,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/my-bookings'
     | '/photos'
+    | '/profile'
     | '/venues'
     | '/admin/albums'
     | '/admin/bookings'
@@ -249,6 +260,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/my-bookings'
     | '/photos'
+    | '/profile'
     | '/venues'
     | '/admin/albums'
     | '/admin/bookings'
@@ -272,6 +284,7 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   MyBookingsRoute: typeof MyBookingsRoute
   PhotosRoute: typeof PhotosRoute
+  ProfileRoute: typeof ProfileRoute
   VenuesRoute: typeof VenuesRoute
   VendorIdRoute: typeof VendorIdRoute
   VenueIdRoute: typeof VenueIdRoute
@@ -284,6 +297,13 @@ declare module '@tanstack/react-router' {
       path: '/venues'
       fullPath: '/venues'
       preLoaderRoute: typeof VenuesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/photos': {
@@ -459,6 +479,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   MyBookingsRoute: MyBookingsRoute,
   PhotosRoute: PhotosRoute,
+  ProfileRoute: ProfileRoute,
   VenuesRoute: VenuesRoute,
   VendorIdRoute: VendorIdRoute,
   VenueIdRoute: VenueIdRoute,

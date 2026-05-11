@@ -467,6 +467,25 @@ export async function adminUpdateBooking(id: string, patch: any) {
   const { error } = await supabase.from("bookings").update(patch).eq("id", id);
   if (error) throw error;
 }
+// ── current user profile ──
+export async function getMyProfile() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
+  const { data, error } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  if (error) throw error;
+  return data;
+}
+export async function updateMyProfile(patch: { name?: string; phone?: string; city?: string; avatar_url?: string }) {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("Not signed in");
+  const { error } = await supabase.from("profiles").update(patch).eq("id", user.id);
+  if (error) throw error;
+}
+export async function changeMyPassword(newPassword: string) {
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+  if (error) throw error;
+}
+
 // ── admin generic CRUD ──
 export type AdminTable =
   | "venues" | "vendor_profiles" | "vendor_listings"
