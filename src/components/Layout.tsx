@@ -92,9 +92,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <i className="fa-solid fa-cart-shopping" /> Cart {count > 0 ? `(${count})` : ""}
             </Link>
             {user && (
-              <Link to="/my-bookings" className="drawer-nav-item">
-                <i className="fa-solid fa-calendar-check" /> My Bookings
-              </Link>
+              <>
+                <Link to="/my-bookings" className="drawer-nav-item">
+                  <i className="fa-solid fa-calendar-check" /> My Bookings
+                </Link>
+                <Link to="/profile" className="drawer-nav-item">
+                  <i className="fa-solid fa-user-circle" /> My Profile
+                </Link>
+              </>
             )}
           </nav>
           <div className="drawer-actions">
