@@ -51,6 +51,13 @@ function CheckoutPage() {
           {items.map((it) => (<div key={it.id} style={{ display: "flex", justifyContent: "space-between", marginBottom: 8, fontSize: 13 }}><span>{it.title} × {it.quantity}</span><span>{fmtBDT(it.unit_price * it.quantity)}</span></div>))}
           <hr style={{ margin: "14px 0", border: "none", borderTop: "1px solid var(--border)" }} />
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}><span>Subtotal</span><strong>{fmtBDT(subtotal)}</strong></div>
+          {pricing?.breakdown.map((b) => (
+            <div key={b.name} style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, fontSize: 13, color: b.rule_type === "discount" ? "#059669" : "#444" }}>
+              <span>{b.name}</span>
+              <span>{b.rule_type === "discount" ? "−" : ""}{fmtBDT(b.amount)}</span>
+            </div>
+          ))}
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}><span>Total</span><strong>{fmtBDT(total)}</strong></div>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}><span>Due now</span><strong style={{ color: "var(--pink)" }}>{fmtBDT(due)}</strong></div>
           <button type="submit" className="btn-primary" disabled={busy} style={{ width: "100%", padding: 14, borderRadius: 10 }}>{busy ? "Processing…" : "Confirm Booking"}</button>
         </aside>
