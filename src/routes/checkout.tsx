@@ -17,12 +17,16 @@ function CheckoutPage() {
   const [payment_method, setMethod] = useState("bkash");
   const [payment_type, setType] = useState<"deposit" | "full">("deposit");
   const [busy, setBusy] = useState(false);
+  const [pricing, setPricing] = useState<{ breakdown: PricingBreakdownLine[]; total: number } | null>(null);
   useEffect(() => { if (ready) listCart().then(setItems); }, [ready, user]);
+  const subtotal = items.reduce((s, it) => s + it.unit_price * it.quantity, 0);
+  // Recompute taxes/discounts/fees whenever the cart subtotal changes.
+  useEffect(() => { if (subtotal) computePricing(subtotal).then(setPricing); }, [subtotal]);
   if (!ready) return <div className="container section-padding">Loading…</div>;
   if (!user) return <div className="container section-padding"><h2>Please log in</h2></div>;
   if (!items.length) return <div className="container section-padding"><h2>Cart is empty</h2><Link to="/venues">Browse →</Link></div>;
-  const subtotal = items.reduce((s, it) => s + it.unit_price * it.quantity, 0);
-  const due = payment_type === "full" ? subtotal : Math.round(subtotal * 0.2);
+  const total = pricing?.total ?? subtotal;
+  const due = payment_type === "full" ? total : Math.round(total * 0.2);
   async function submit(e: React.FormEvent) {
     e.preventDefault(); setBusy(true);
     try {
