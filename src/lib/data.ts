@@ -445,12 +445,23 @@ export async function isAdmin() {
   return !!data;
 }
 export async function adminListBookings(opts: { status?: string; limit?: number } = {}) {
-  let q = supabase.from("bookings").select("*, booking_items(*), payment_proofs(*)")
+  // NB: payment_proofs and transactions don't have FK constraints in this
+  // schema, so we fetch transactions separately and stitch them in below.
+  let q = supabase.from("bookings").select("*, booking_items(*)")
     .order("created_at", { ascending: false }).limit(opts.limit ?? 100);
   if (opts.status) q = q.eq("status", opts.status as any);
   const { data, error } = await q;
   if (error) throw error;
-  return data || [];
+  const bookings = data || [];
+  if (!bookings.length) return bookings;
+  const ids = bookings.map((b: any) => b.id);
+  const { data: txs } = await supabase.from("transactions").select("*").in("booking_id", ids);
+  const byBooking = new Map<string, any[]>();
+  (txs || []).forEach((t: any) => {
+    const arr = byBooking.get(t.booking_id) || [];
+    arr.push(t); byBooking.set(t.booking_id, arr);
+  });
+  return bookings.map((b: any) => ({ ...b, transactions: byBooking.get(b.id) || [] }));
 }
 export async function adminUpdateBooking(id: string, patch: any) {
   const { error } = await supabase.from("bookings").update(patch).eq("id", id);
