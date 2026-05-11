@@ -11,7 +11,7 @@ export const Route = createFileRoute("/admin/pricing")({
       fields={[
         { key: "name" },
         { key: "rule_type", type: "select", options: ["tax", "discount", "fee"] },
-        { key: "scope", type: "select", options: ["all", "venues", "vendors"] },
+        { key: "scope", type: "select", options: ["all", "venue", "vendor"] },
         { key: "value", type: "number" },
         { key: "starts_at", type: "date", optional: true },
         { key: "ends_at", type: "date", optional: true },
