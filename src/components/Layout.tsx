@@ -24,11 +24,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [count, setCount] = useState(0);
 
+  // Admin pages get a dedicated layout (sidebar in admin.tsx); skip the
+  // public navbar / bottom-nav so global .navbar styles don't bleed in.
+  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
+
   useEffect(() => {
     if (user) cartCount().then(setCount).catch(() => {}); else setCount(0);
   }, [user, pathname]);
 
   useEffect(() => { setDrawerOpen(false); }, [pathname]);
+
+  if (isAdminRoute) {
+    return (
+      <>
+        {children}
+        <AuthModal open={!!authOpen} mode={authOpen || "login"} onClose={() => setAuthOpen(false)} onSwitch={(m) => setAuthOpen(m)} />
+      </>
+    );
+  }
 
   return (
     <>

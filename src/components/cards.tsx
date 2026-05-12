@@ -95,24 +95,37 @@ export function VenueCardView({ v }: { v: VenueCard }) {
 }
 
 export function VendorCardView({ v }: { v: any }) {
+  // Safe fallbacks so cards always look complete even with sparse data.
+  const title = v.title || "Untitled service";
+  const category = (v.category || "").replace(/_/g, " ") || "General";
+  const city = v.city || "Multiple cities";
+  const rating = Number(v.rating_avg ?? 0).toFixed(1);
+  const ratingCount = Number(v.rating_count ?? 0);
+  const priceLabel = v.price_from != null
+    ? `৳ ${Number(v.price_from).toLocaleString("en-IN")}+`
+    : "Price on request";
+  const fallbackImg = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=900";
   return (
     <Link to="/vendor/$id" params={{ id: v.id }} style={{ textDecoration: "none", color: "inherit" }}>
       <div className="vendor-card">
         <div className="card-img-container">
-          {v.cover_image_url && <img src={v.cover_image_url} alt={v.title} loading="lazy" />}
+          <img src={v.cover_image_url || fallbackImg} alt={title} loading="lazy" />
           <WishlistBtn type="vendor" id={v.id} className="wishlist-btn" />
         </div>
         <div className="vendor-info">
-          <span className="category-tag">{v.category}</span>
-          <h3>{v.title}</h3>
+          <span className="category-tag" style={{ textTransform: "capitalize" }}>{category}</span>
+          <h3 style={{ margin: "6px 0" }}>{title}</h3>
           {v.badge && <span className="vendor-badge">{v.badge}</span>}
           <div className="vendor-stats">
-            <div className="vendor-rating"><i className="fa-solid fa-star" /> {(v.rating_avg ?? 0).toFixed(1)} <span style={{ color:"#999", fontWeight:400 }}>({v.rating_count ?? 0})</span></div>
-            <div className="price-tag">
-              {v.price_from != null ? `৳ ${Number(v.price_from).toLocaleString("en-IN")}+` : "—"}
+            <div className="vendor-rating">
+              <i className="fa-solid fa-star" /> {rating}
+              <span style={{ color: "#999", fontWeight: 400 }}> ({ratingCount})</span>
             </div>
+            <div className="price-tag">{priceLabel}</div>
           </div>
-          <p className="location" style={{ marginTop: 8 }}><i className="fa-solid fa-location-dot" /> {v.city}</p>
+          <p className="location" style={{ marginTop: 8 }}>
+            <i className="fa-solid fa-location-dot" /> {city}
+          </p>
         </div>
       </div>
     </Link>

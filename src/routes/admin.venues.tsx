@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CrudTable } from "@/components/admin/CrudTable";
+import { cityOptions, VENUE_TYPES } from "@/lib/filters";
 
 export const Route = createFileRoute("/admin/venues")({
   component: () => (
@@ -10,11 +11,11 @@ export const Route = createFileRoute("/admin/venues")({
       defaults={{ is_active: true, handpicked: false }}
       fields={[
         { key: "name" },
-        { key: "venue_type", optional: true },
+        { key: "venue_type", type: "select", options: VENUE_TYPES, optional: true },
         { key: "description", type: "textarea", optional: true },
         { key: "address", optional: true },
         { key: "area", optional: true },
-        { key: "city", optional: true },
+        { key: "city", type: "select", options: cityOptions, optional: true },
         { key: "capacity_min", type: "number", optional: true },
         { key: "capacity_max", type: "number", optional: true },
         { key: "rooms", type: "number", optional: true },

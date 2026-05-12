@@ -343,12 +343,20 @@ export async function computePricing(subtotal: number): Promise<{
   let tax_total = 0, discount_total = 0, fee_total = 0;
   const breakdown: PricingBreakdownLine[] = [];
   for (const r of rules as any[]) {
-    const amt = Math.round((Number(r.value) || 0) * subtotal / 100);
+    // Percent rules apply to subtotal; flat rules use the raw value.
+    const isPercent = String(r.rule_type).endsWith("_percent");
+    const amt = isPercent
+      ? Math.round((Number(r.value) || 0) * subtotal / 100)
+      : Math.round(Number(r.value) || 0);
     if (!amt) continue;
-    if (r.rule_type === "tax") tax_total += amt;
-    else if (r.rule_type === "discount") discount_total += amt;
-    else if (r.rule_type === "fee") fee_total += amt;
-    breakdown.push({ name: r.name, rule_type: r.rule_type, amount: amt });
+    const kind: "tax" | "discount" | "fee" =
+      String(r.rule_type).startsWith("tax") ? "tax"
+      : String(r.rule_type).startsWith("discount") ? "discount"
+      : "fee";
+    if (kind === "tax") tax_total += amt;
+    else if (kind === "discount") discount_total += amt;
+    else fee_total += amt;
+    breakdown.push({ name: r.name, rule_type: kind, amount: amt });
   }
   const total = subtotal + tax_total + fee_total - discount_total;
   return { breakdown, tax_total, discount_total, fee_total, total };
@@ -468,17 +476,27 @@ export async function adminUpdateBooking(id: string, patch: any) {
   if (error) throw error;
 }
 // ── current user profile ──
+/** Fetch profile for the signed-in user. If the row is missing (legacy users
+ *  created before the auto-trigger existed), upsert a stub row first. */
 export async function getMyProfile() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
-  const { data, error } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  let { data, error } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
   if (error) throw error;
+  if (!data) {
+    const seed = { id: user.id, email: user.email || null, name: (user.user_metadata as any)?.name || user.email || null };
+    const { data: created, error: upErr } = await supabase.from("profiles").upsert(seed).select().single();
+    if (upErr) throw upErr;
+    data = created;
+  }
   return data;
 }
 export async function updateMyProfile(patch: { name?: string; phone?: string; city?: string; avatar_url?: string }) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("Not signed in");
-  const { error } = await supabase.from("profiles").update(patch).eq("id", user.id);
+  // Upsert (not update) so legacy users without a profile row still succeed.
+  const { error } = await supabase.from("profiles")
+    .upsert({ id: user.id, email: user.email || null, ...patch });
   if (error) throw error;
 }
 export async function changeMyPassword(newPassword: string) {

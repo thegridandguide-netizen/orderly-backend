@@ -10,9 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VenuesRouteImport } from './routes/venues'
+import { Route as VendorsRouteImport } from './routes/vendors'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PhotosRouteImport } from './routes/photos'
 import { Route as MyBookingsRouteImport } from './routes/my-bookings'
+import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -36,6 +38,11 @@ const VenuesRoute = VenuesRouteImport.update({
   path: '/venues',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VendorsRoute = VendorsRouteImport.update({
+  id: '/vendors',
+  path: '/vendors',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -49,6 +56,11 @@ const PhotosRoute = PhotosRouteImport.update({
 const MyBookingsRoute = MyBookingsRouteImport.update({
   id: '/my-bookings',
   path: '/my-bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExploreRoute = ExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutRoute = CheckoutRouteImport.update({
@@ -142,9 +154,11 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/explore': typeof ExploreRoute
   '/my-bookings': typeof MyBookingsRoute
   '/photos': typeof PhotosRoute
   '/profile': typeof ProfileRoute
+  '/vendors': typeof VendorsRoute
   '/venues': typeof VenuesRoute
   '/admin/albums': typeof AdminAlbumsRoute
   '/admin/bookings': typeof AdminBookingsRoute
@@ -164,9 +178,11 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/explore': typeof ExploreRoute
   '/my-bookings': typeof MyBookingsRoute
   '/photos': typeof PhotosRoute
   '/profile': typeof ProfileRoute
+  '/vendors': typeof VendorsRoute
   '/venues': typeof VenuesRoute
   '/admin/albums': typeof AdminAlbumsRoute
   '/admin/bookings': typeof AdminBookingsRoute
@@ -188,9 +204,11 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/explore': typeof ExploreRoute
   '/my-bookings': typeof MyBookingsRoute
   '/photos': typeof PhotosRoute
   '/profile': typeof ProfileRoute
+  '/vendors': typeof VendorsRoute
   '/venues': typeof VenuesRoute
   '/admin/albums': typeof AdminAlbumsRoute
   '/admin/bookings': typeof AdminBookingsRoute
@@ -213,9 +231,11 @@ export interface FileRouteTypes {
     | '/admin'
     | '/cart'
     | '/checkout'
+    | '/explore'
     | '/my-bookings'
     | '/photos'
     | '/profile'
+    | '/vendors'
     | '/venues'
     | '/admin/albums'
     | '/admin/bookings'
@@ -235,9 +255,11 @@ export interface FileRouteTypes {
     | '/'
     | '/cart'
     | '/checkout'
+    | '/explore'
     | '/my-bookings'
     | '/photos'
     | '/profile'
+    | '/vendors'
     | '/venues'
     | '/admin/albums'
     | '/admin/bookings'
@@ -258,9 +280,11 @@ export interface FileRouteTypes {
     | '/admin'
     | '/cart'
     | '/checkout'
+    | '/explore'
     | '/my-bookings'
     | '/photos'
     | '/profile'
+    | '/vendors'
     | '/venues'
     | '/admin/albums'
     | '/admin/bookings'
@@ -282,9 +306,11 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
+  ExploreRoute: typeof ExploreRoute
   MyBookingsRoute: typeof MyBookingsRoute
   PhotosRoute: typeof PhotosRoute
   ProfileRoute: typeof ProfileRoute
+  VendorsRoute: typeof VendorsRoute
   VenuesRoute: typeof VenuesRoute
   VendorIdRoute: typeof VendorIdRoute
   VenueIdRoute: typeof VenueIdRoute
@@ -297,6 +323,13 @@ declare module '@tanstack/react-router' {
       path: '/venues'
       fullPath: '/venues'
       preLoaderRoute: typeof VenuesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vendors': {
+      id: '/vendors'
+      path: '/vendors'
+      fullPath: '/vendors'
+      preLoaderRoute: typeof VendorsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -318,6 +351,13 @@ declare module '@tanstack/react-router' {
       path: '/my-bookings'
       fullPath: '/my-bookings'
       preLoaderRoute: typeof MyBookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout': {
@@ -477,9 +517,11 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
+  ExploreRoute: ExploreRoute,
   MyBookingsRoute: MyBookingsRoute,
   PhotosRoute: PhotosRoute,
   ProfileRoute: ProfileRoute,
+  VendorsRoute: VendorsRoute,
   VenuesRoute: VenuesRoute,
   VendorIdRoute: VendorIdRoute,
   VenueIdRoute: VenueIdRoute,
@@ -487,3 +529,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
