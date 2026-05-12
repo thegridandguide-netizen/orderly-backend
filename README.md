@@ -1,194 +1,168 @@
-# Eventix — Venue & Vendor Booking Platform
+# Eventix — Event Booking Platform
 
-A full-stack booking platform for wedding/event venues and vendors built on
-**TanStack Start + React 19** with **Lovable Cloud (Supabase)** as the backend.
-
-It ships with:
-
-- Public catalog: Venues, Vendors, Albums, Photos, Categories
-- Auth (email + Google) with `customer / vendor / admin` roles
-- **Cart** with per-user persistence
-- **Checkout → Booking → Transaction** flow with pricing-rule engine
-- **Admin panel** with full CRUD for every table
-- Row-Level-Security (RLS) on every table
+A full-stack event booking app for venues and vendors built with **TanStack Start (React 19 + Vite)** and **Lovable Cloud (Supabase)**.
 
 ---
 
-## 1. Tech Stack
+## Features
 
-| Layer        | Tech                                           |
-| ------------ | ---------------------------------------------- |
-| Framework    | TanStack Start v1 (Vite 7, React 19, SSR)      |
-| Routing      | TanStack Router (file-based, `src/routes/`)    |
-| Backend      | Lovable Cloud (Supabase Postgres + Auth + RLS) |
-| Styling      | Tailwind v4 + custom CSS variables             |
-| Realtime/RPC | Supabase JS SDK (browser client)               |
+### Customer
+- Browse **Venues**, **Vendors**, **Photos**, and an **Explore** hub
+- Filter by city, category/type, price, rating
+- Wishlist, Cart, Checkout with deposit / full payment
+- **My Bookings** with payment status tracking
+- **My Profile** (name, phone, city, avatar, password change)
 
----
+### Admin (`/admin`)
+Role-gated dashboard with full CRUD over:
+- Venues, Vendor Listings, Vendor Profiles
+- Albums, Photos, Event Categories
+- **Pricing Rules** (tax / discount / fee — percent or flat)
+- **Bookings & Transactions** (mark paid → auto-advances booking status)
+- Users & Roles (toggle admin / vendor / customer)
 
-## 2. Local Setup
-
-```bash
-bun install
-bun run dev          # http://localhost:5173
-```
-
-Lovable Cloud is already provisioned — `.env` is auto-generated and contains
-`VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`. Do not edit it.
+All admin forms now use **dropdowns** that share the same source-of-truth as user-side filter chips (`src/lib/filters.ts`).
 
 ---
 
-## 3. Database Overview
+## Admin Setup Guide
 
-| Table             | Purpose                                              |
-| ----------------- | ---------------------------------------------------- |
-| `profiles`        | Public user data (mirrors `auth.users`)              |
-| `user_roles`      | Role assignments — never put roles on `profiles`     |
-| `venues`          | Venue catalog                                        |
-| `vendor_profiles` | Vendor accounts (linked to a `user_id`)              |
-| `vendor_listings` | Individual vendor services                           |
-| `albums` / `photos` | Inspiration galleries                              |
-| `event_categories`| Browseable categories                                |
-| `cart_items`      | Per-user cart                                        |
-| `pricing_rules`   | Tax / discount / fee rules applied at checkout       |
-| `bookings`        | Order header                                         |
-| `booking_items`   | Snapshotted order lines                              |
-| `transactions`    | Payment attempts (manual / bkash / nagad / card / …) |
-| `payment_proofs`  | Optional uploaded payment screenshots                |
-| `enquiries`, `wishlist_items`, `reviews` | Auxiliary           |
-
-All tables have RLS. Public catalog tables (`venues`, `vendor_*`, `albums`,
-`photos`, `event_categories`) allow `SELECT` for everyone. User-owned tables
-(`cart_items`, `bookings`, `transactions`, …) restrict to `auth.uid() =
-user_id`. Every table also has an `*_admin_all` policy gated by
-`has_role(auth.uid(), 'admin')`.
-
----
-
-## 4. Admin Setup Guide
-
-### 4.1 Create the first admin
-
-1. Sign up a normal user from the homepage (email + password or Google).
-2. Open **Lovable Cloud → Backend → SQL Editor** and run:
-
+1. Sign up a regular user via the app.
+2. Open Lovable Cloud → SQL Editor and run:
    ```sql
-   insert into public.user_roles (user_id, role)
-   values ('<your-auth-user-id>', 'admin')
-   on conflict do nothing;
+   INSERT INTO public.user_roles (user_id, role)
+   VALUES ('YOUR_USER_ID_HERE', 'admin');
    ```
-
-   (Get your user id from the **Authentication → Users** page or
-   `select id, email from auth.users;`.)
-
-3. Reload the app and visit `/admin`.
-
-After that, additional admins can be granted/revoked from
-**Admin → Users & Roles** with a single checkbox — no SQL required.
-
-### 4.2 Admin Panel Routes
-
-| Route                  | Manages                                |
-| ---------------------- | -------------------------------------- |
-| `/admin`               | Dashboard with counts + revenue        |
-| `/admin/venues`        | Venues catalog (CRUD)                  |
-| `/admin/vendors`       | Vendor profiles (CRUD)                 |
-| `/admin/listings`      | Vendor listings (CRUD)                 |
-| `/admin/albums`        | Inspiration albums (CRUD)              |
-| `/admin/photos`        | Photos (CRUD)                          |
-| `/admin/categories`    | Event categories (CRUD)                |
-| `/admin/pricing`       | Tax / discount / fee rules (CRUD)      |
-| `/admin/bookings`      | Bookings + transactions + status flow  |
-| `/admin/transactions`  | Raw transactions (CRUD)                |
-| `/admin/users`         | Assign/remove admin / vendor / customer roles |
-
-The `/admin` layout is gated by `isAdmin()` — non-admins are redirected.
-
-### 4.3 Pricing Rules
-
-Each rule has:
-
-- **type**: `tax`, `discount`, or `fee`
-- **value**: a percentage of the subtotal (e.g. `15` = 15%)
-- **scope**: `all` / `venue` / `vendor` (currently applied to subtotal as a whole)
-- **active** + optional `starts_at` / `ends_at` window
-
-Active rules are computed at checkout (`computePricing()` in `src/lib/data.ts`)
-and snapshotted onto the booking as `pricing_breakdown` so changes never
-mutate historical orders.
-
-### 4.4 Order Lifecycle
-
-```
-cart_items  ─►  createBooking()  ─►  bookings (pending)
-                                 ├─► booking_items   (snapshot)
-                                 └─► transactions    (initiated)
-
-Admin clicks "Mark paid" on a transaction
-   └─► transaction.status = success
-       booking.amount_paid += tx.amount
-       booking.status      = confirmed   (partial)
-                          or completed   (fully paid)
-```
-
-`booking_status` enum: `pending | confirmed | completed | cancelled | refunded`.
-`transaction_status` enum: `initiated | success | failed | refunded`.
-
-Status changes and "Mark paid" are one-click in `/admin/bookings`.
+   Get `YOUR_USER_ID_HERE` from `select id, email from auth.users;`.
+3. Reload the app and visit **/admin**.
 
 ---
 
-## 5. Project Layout
+## Filter Source-of-Truth
+
+All filter dropdowns (admin and user side) are defined in **`src/lib/filters.ts`**:
+
+| Constant              | Used in                                        |
+|-----------------------|-----------------------------------------------|
+| `CITIES`              | venues page, vendors page, admin city dropdowns |
+| `VENUE_TYPES`         | venues page filter chips, admin venues form     |
+| `VENDOR_CATEGORIES`   | vendors page filter chips, admin listings form  |
+| `PRICING_RULE_TYPES`  | admin pricing form (`tax_percent`, `fee_percent`, …) |
+| `PRICING_RULE_SCOPES` | admin pricing form (`all`, `venue`, `vendor`)   |
+| `loadVendorProfileOptions` | admin listings → vendor dropdown          |
+| `loadAlbumOptions`    | admin photos → album dropdown                  |
+
+Edit one place → both sides update.
+
+---
+
+## Routes
+
+| Path            | Description                              |
+|-----------------|------------------------------------------|
+| `/`             | Landing                                  |
+| `/venues`       | Venue listing + filters                  |
+| `/venue/$id`    | Venue detail                             |
+| `/vendors`      | Vendor listing + filters **(new)**       |
+| `/vendor/$id`   | Vendor detail                            |
+| `/explore`      | Explore hub **(new)**                    |
+| `/photos`       | Photo gallery                            |
+| `/cart`         | Cart                                     |
+| `/checkout`     | Checkout (with pricing breakdown)        |
+| `/my-bookings`  | Authenticated user bookings              |
+| `/profile`      | Authenticated user profile               |
+| `/admin/*`      | Admin panel (role: admin)                |
+
+---
+
+## Pricing Engine
+
+`computePricing(subtotal)` in `src/lib/data.ts` reads active rules from `pricing_rules` and computes tax / discount / fee:
+
+- Rule type ending in `_percent` → applied as % of subtotal
+- Rule type ending in `_flat` → applied as flat amount
+- Result is snapshotted to `bookings.pricing_breakdown` so historical orders are stable even if rules change later.
+
+`adminMarkTransactionPaid(txId)` advances the booking:
+- partial payment → `confirmed`
+- full payment → `completed`
+
+---
+
+## Database Schema (key tables)
+
+`profiles`, `user_roles`, `venues`, `vendor_profiles`, `vendor_listings`,
+`event_categories`, `albums`, `photos`, `cart_items`, `wishlist_items`,
+`bookings`, `booking_items`, `transactions`, `payment_proofs`,
+`enquiries`, `reviews`, `pricing_rules`.
+
+All tables have RLS enabled. Public-readable: venues/vendors/photos/albums/categories/reviews. Per-user: cart, wishlist, profile, bookings. Admin-only writes for catalog tables.
+
+---
+
+## Recent Fixes (this release)
+
+| Issue                                          | Fix                                                                 |
+|------------------------------------------------|---------------------------------------------------------------------|
+| `/vendors` and `/explore` returned 404         | Added `src/routes/vendors.tsx` and `src/routes/explore.tsx`         |
+| Admin "Vendor Listings" used free-text inputs  | All key fields are now dropdowns (city, category, vendor)           |
+| User-side cards missing fallback info          | `VendorCardView` now shows fallback image, "Price on request", capitalised category, location fallback |
+| Profile crashed for legacy users (no DB row)   | `getMyProfile` upserts a stub row; backfill ran for existing users  |
+| Admin pages picked up public navbar / CSS      | `Layout` skips navbar + bottom-nav on `/admin/*`; CrudTable wrapped in `.admin-scope` |
+| `pricing_rules` form used wrong enum values    | Now uses `tax_percent` / `fee_percent` / `discount_*`               |
+| `computePricing` ignored real enum values      | Handles both `_percent` and `_flat` rule types                      |
+| Empty database → blank pages                   | Seeded 6 venues, 4 vendors, 6 listings, 4 albums, 8 photos, 6 categories, 2 pricing rules |
+
+---
+
+## Blackbox QA Checklist
+
+After applying these changes, walk these flows:
+
+| Route                  | Expected                                                      |
+|------------------------|---------------------------------------------------------------|
+| `/`                    | Hero loads, handpicked venues render                          |
+| `/venues`              | 6 seeded venues, filters reduce/restore results               |
+| `/vendors`             | 6 seeded listings, category chips filter correctly            |
+| `/explore`             | 3 hub tiles, 6 event categories visible                       |
+| `/photos`              | 8 photo tiles                                                 |
+| `/cart` (signed in)    | Add a venue → see line item, qty editing works                |
+| `/checkout`            | Pricing breakdown shows VAT 5% + Service fee 2%               |
+| `/my-bookings`         | Latest booking visible after checkout                         |
+| `/profile`             | Form pre-filled; save persists; password change works         |
+| `/admin`               | Loads only for admin user; sidebar visible without public navbar |
+| `/admin/listings`      | "+ New" form has dropdowns for city / category / vendor       |
+| `/admin/pricing`       | Rule type dropdown shows `tax_percent` etc.                   |
+| `/admin/bookings`      | "Mark paid" advances booking status                           |
+| `/admin/users`         | Toggling admin role updates `user_roles`                      |
+
+---
+
+## Local Dev
+
+Lovable handles build, deploy, and Cloud (Supabase) automatically. Just edit code in the workspace.
+
+For environment variables, see Lovable Cloud → Settings. Never edit `.env` directly.
+
+---
+
+## Project Structure
 
 ```
 src/
-├── routes/                # File-based routes
-│   ├── __root.tsx         # Root layout (do NOT replace)
-│   ├── index.tsx          # Landing page
-│   ├── venues.tsx, venue.$id.tsx
-│   ├── vendor.$id.tsx, photos.tsx
-│   ├── cart.tsx, checkout.tsx, my-bookings.tsx
-│   ├── admin.tsx          # Admin layout (role guard)
-│   └── admin.*.tsx        # Admin CRUD pages
-├── components/
-│   ├── admin/CrudTable.tsx  # Reusable admin CRUD UI
-│   ├── AuthModal.tsx, Layout.tsx, cards.tsx
-├── lib/
-│   ├── data.ts            # ALL Supabase calls (catalog, cart, booking, admin)
-│   └── supabase.ts        # Re-exports the generated client + helpers
-└── integrations/supabase/ # Auto-generated — do NOT edit
+  routes/             TanStack file-based routes
+    admin.*.tsx       Admin sub-routes
+    vendors.tsx       NEW
+    explore.tsx       NEW
+    profile.tsx
+  components/
+    Layout.tsx        Public navbar / mobile drawer (skipped on /admin)
+    admin/CrudTable.tsx  Generic admin CRUD table + form
+    cards.tsx         VenueCardView, VendorCardView
+  lib/
+    data.ts           All DB calls, pricing engine, ordering
+    filters.ts        NEW — single source of truth for dropdowns
+    supabase.ts       Re-exports + formatters
+  integrations/supabase/   Auto-generated client + types
+supabase/migrations/  SQL migrations (seed data, schema)
 ```
-
----
-
-## 6. Security Notes
-
-- **Roles live in `user_roles`**, never on `profiles` — enforced by the
-  `has_role()` `SECURITY DEFINER` function used in every RLS policy.
-- **Service-role key** is never used in client code.
-- **Cart / bookings / transactions** can only be read or written by their
-  owning user (or an admin).
-- Admin-only mutations on catalog tables go through RLS — there is no separate
-  trusted backend; the policies are the contract.
-
----
-
-## 7. Common Tasks
-
-| I want to…                          | Do this                                       |
-| ----------------------------------- | --------------------------------------------- |
-| Add a new venue                     | `/admin/venues` → **+ New**                   |
-| Add a 15% VAT                       | `/admin/pricing` → New, type=tax, value=15    |
-| Promote a user to admin             | `/admin/users` → check the **Admin** column   |
-| Mark a booking paid                 | `/admin/bookings` → **Mark paid** on the tx   |
-| Cancel a booking                    | `/admin/bookings` → **→ cancelled**           |
-| Inspect raw rows                    | Lovable Cloud → Database → table editor       |
-
----
-
-## 8. Roadmap
-
-- Stripe / bKash live payment integration (currently manual / admin-marked)
-- Vendor self-service dashboard (separate from the admin panel)
-- Email notifications on booking status change
-- Per-listing pricing-rule scoping (the `scope` column is wired but not yet enforced server-side)

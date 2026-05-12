@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CrudTable } from "@/components/admin/CrudTable";
+import { cityOptions, loadAlbumOptions } from "@/lib/filters";
 
 export const Route = createFileRoute("/admin/photos")({
   component: () => (
@@ -11,8 +12,8 @@ export const Route = createFileRoute("/admin/photos")({
         { key: "image_url" },
         { key: "title", optional: true },
         { key: "category", optional: true },
-        { key: "city", optional: true },
-        { key: "album_id", optional: true },
+        { key: "city", type: "select", options: cityOptions, optional: true },
+        { key: "album_id", label: "Album", type: "select", optionsAsync: loadAlbumOptions, optional: true },
       ]}
     />
   ),
