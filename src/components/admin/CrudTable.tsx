@@ -2,11 +2,20 @@ import { useEffect, useState } from "react";
 import { adminList, adminCreate, adminUpdate, adminDelete, type AdminTable } from "@/lib/data";
 import { toast } from "sonner";
 
+/**
+ * Field schema for admin CRUD form.
+ * - `type: "select"` + `options` renders a dropdown.
+ * - `optionsAsync` lets the dialog load options from the DB (e.g. vendor profiles).
+ *   Each option is { value, label } so we can show a friendly name and
+ *   persist the underlying id/slug.
+ */
+export type SelectOption = { value: string; label: string };
 export type FieldDef = {
   key: string;
   label?: string;
   type?: "text" | "textarea" | "number" | "boolean" | "json" | "date" | "select";
-  options?: string[];
+  options?: SelectOption[] | string[];
+  optionsAsync?: () => Promise<SelectOption[]>;
   optional?: boolean;
 };
 
@@ -51,7 +60,7 @@ export function CrudTable({
   const cols = display || fields.slice(0, 5).map((f) => f.key);
 
   return (
-    <div>
+    <div className="admin-scope">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
         <h2 style={{ margin: 0 }}>{title}</h2>
         <button className="btn-primary" onClick={() => setEditing({ ...defaults })}>+ New</button>
@@ -91,12 +100,29 @@ function fmt(v: any) {
   return s.length > 60 ? s.slice(0, 60) + "…" : s;
 }
 
+/** Normalise option list (string[] | SelectOption[]) into {value,label}[]. */
+function normaliseOptions(opts: SelectOption[] | string[] | undefined): SelectOption[] {
+  if (!opts) return [];
+  return opts.map((o) => (typeof o === "string" ? { value: o, label: o } : o));
+}
+
 function EditDialog({ row, fields, onSave, onClose }: { row: any; fields: FieldDef[]; onSave: (v: any) => void; onClose: () => void }) {
   const [v, setV] = useState<any>(() => {
     const o: any = {};
     fields.forEach((f) => { o[f.key] = row[f.key] ?? (f.type === "boolean" ? false : f.type === "number" ? "" : ""); });
     return o;
   });
+  // Async options cache (e.g. vendor_profile_id dropdown)
+  const [asyncOpts, setAsyncOpts] = useState<Record<string, SelectOption[]>>({});
+  useEffect(() => {
+    fields.forEach((f) => {
+      if (f.optionsAsync && !asyncOpts[f.key]) {
+        f.optionsAsync().then((rs) => setAsyncOpts((prev) => ({ ...prev, [f.key]: rs }))).catch(() => {});
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function submit(e: React.FormEvent) {
     e.preventDefault();
     const out: any = {};
@@ -115,25 +141,30 @@ function EditDialog({ row, fields, onSave, onClose }: { row: any; fields: FieldD
       <div style={modal} onClick={(e) => e.stopPropagation()}>
         <h3 style={{ marginTop: 0 }}>{row.id ? "Edit" : "Create"}</h3>
         <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {fields.map((f) => (
-            <div key={f.key}>
-              <label style={{ display: "block", fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{f.label || f.key}</label>
-              {f.type === "textarea" ? (
-                <textarea rows={3} value={v[f.key] ?? ""} onChange={(e) => setV({ ...v, [f.key]: e.target.value })} style={inp} />
-              ) : f.type === "boolean" ? (
-                <input type="checkbox" checked={!!v[f.key]} onChange={(e) => setV({ ...v, [f.key]: e.target.checked })} />
-              ) : f.type === "select" ? (
-                <select value={v[f.key] ?? ""} onChange={(e) => setV({ ...v, [f.key]: e.target.value })} style={inp}>
-                  <option value="">—</option>
-                  {(f.options || []).map((o) => <option key={o} value={o}>{o}</option>)}
-                </select>
-              ) : f.type === "json" ? (
-                <textarea rows={3} value={typeof v[f.key] === "string" ? v[f.key] : JSON.stringify(v[f.key] ?? {}, null, 2)} onChange={(e) => setV({ ...v, [f.key]: e.target.value })} style={{ ...inp, fontFamily: "monospace", fontSize: 12 }} />
-              ) : (
-                <input type={f.type === "number" ? "number" : f.type === "date" ? "date" : "text"} value={v[f.key] ?? ""} onChange={(e) => setV({ ...v, [f.key]: e.target.value })} style={inp} />
-              )}
-            </div>
-          ))}
+          {fields.map((f) => {
+            const selectOpts = f.type === "select"
+              ? (f.optionsAsync ? asyncOpts[f.key] || [] : normaliseOptions(f.options))
+              : [];
+            return (
+              <div key={f.key}>
+                <label style={{ display: "block", fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{f.label || f.key}</label>
+                {f.type === "textarea" ? (
+                  <textarea rows={3} value={v[f.key] ?? ""} onChange={(e) => setV({ ...v, [f.key]: e.target.value })} style={inp} />
+                ) : f.type === "boolean" ? (
+                  <input type="checkbox" checked={!!v[f.key]} onChange={(e) => setV({ ...v, [f.key]: e.target.checked })} />
+                ) : f.type === "select" ? (
+                  <select value={v[f.key] ?? ""} onChange={(e) => setV({ ...v, [f.key]: e.target.value })} style={inp}>
+                    <option value="">{f.optional ? "— none —" : "— select —"}</option>
+                    {selectOpts.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                  </select>
+                ) : f.type === "json" ? (
+                  <textarea rows={3} value={typeof v[f.key] === "string" ? v[f.key] : JSON.stringify(v[f.key] ?? {}, null, 2)} onChange={(e) => setV({ ...v, [f.key]: e.target.value })} style={{ ...inp, fontFamily: "monospace", fontSize: 12 }} />
+                ) : (
+                  <input type={f.type === "number" ? "number" : f.type === "date" ? "date" : "text"} value={v[f.key] ?? ""} onChange={(e) => setV({ ...v, [f.key]: e.target.value })} style={inp} />
+                )}
+              </div>
+            );
+          })}
           <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 8 }}>
             <button type="button" onClick={onClose} style={btnSm}>Cancel</button>
             <button type="submit" className="btn-primary">Save</button>
