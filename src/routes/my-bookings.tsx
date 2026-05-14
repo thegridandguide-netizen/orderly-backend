@@ -5,10 +5,11 @@ import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/my-bookings")({ component: MyBookingsPage });
 
+// Mirrors the booking_status enum in Postgres.
 const STATUS: Record<string, { label: string; color: string }> = {
   pending: { label: "Pending", color: "#b45309" },
-  deposit_paid: { label: "Confirmed", color: "#15803d" },
-  paid: { label: "Paid", color: "#15803d" },
+  confirmed: { label: "Confirmed", color: "#15803d" },
+  completed: { label: "Paid", color: "#15803d" },
   cancelled: { label: "Cancelled", color: "#b91c1c" },
   refunded: { label: "Refunded", color: "#6b7280" },
 };
