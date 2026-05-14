@@ -438,6 +438,66 @@ export async function adminMarkTransactionPaid(transactionId: string) {
   await supabase.from("bookings").update({ amount_paid, status }).eq("id", booking.id);
 }
 
+// ─── payment proofs (manual gateways: bKash/Nagad/bank etc.) ──
+/** Customer submits a payment proof (txn ref + optional screenshot URL).
+ *  Admin reviews from /admin/bookings and approves → marks transaction paid. */
+export async function submitPaymentProof(p: {
+  booking_id: string; amount: number; reference: string; image_url?: string; notes?: string;
+}) {
+  const u = await getUser(); if (!u) throw new Error("not_authenticated");
+  const { error } = await supabase.from("payment_proofs").insert({
+    booking_id: p.booking_id, user_id: u.id,
+    amount: p.amount, reference: p.reference,
+    image_url: p.image_url || null, notes: p.notes || null,
+    status: "pending",
+  });
+  if (error) throw error;
+}
+
+export async function listMyPaymentProofs(booking_id: string) {
+  const { data } = await supabase.from("payment_proofs")
+    .select("*").eq("booking_id", booking_id).order("created_at", { ascending: false });
+  return data || [];
+}
+
+/** Admin approves a payment proof → opens a "success" transaction and
+ *  recomputes the booking status via adminMarkTransactionPaid logic. */
+export async function adminApprovePaymentProof(proofId: string) {
+  const { data: proof, error } = await supabase.from("payment_proofs")
+    .select("*").eq("id", proofId).single();
+  if (error) throw error;
+  if (proof.status === "approved") return;
+  // 1. Insert a successful transaction
+  const amt = Number(proof.amount || 0);
+  const { data: tx, error: txErr } = await supabase.from("transactions").insert({
+    booking_id: proof.booking_id, user_id: proof.user_id,
+    gateway: "manual", status: "success",
+    amount: amt, currency: "BDT", reference: proof.reference,
+  }).select().single();
+  if (txErr) throw txErr;
+  // 2. Bump booking amount_paid + status
+  const { data: booking } = await supabase.from("bookings").select("*").eq("id", proof.booking_id).single();
+  if (booking) {
+    const amount_paid = Number(booking.amount_paid || 0) + Number(tx.amount || 0);
+    const status: "completed" | "confirmed" =
+      amount_paid >= Number(booking.total_amount) ? "completed" : "confirmed";
+    await supabase.from("bookings").update({ amount_paid, status }).eq("id", booking.id);
+  }
+  // 3. Mark proof approved
+  await supabase.from("payment_proofs").update({ status: "approved" }).eq("id", proofId);
+}
+
+export async function adminRejectPaymentProof(proofId: string) {
+  const { error } = await supabase.from("payment_proofs").update({ status: "rejected" }).eq("id", proofId);
+  if (error) throw error;
+}
+
+export async function adminListPaymentProofs(booking_ids: string[]) {
+  if (!booking_ids.length) return [];
+  const { data } = await supabase.from("payment_proofs").select("*").in("booking_id", booking_ids);
+  return data || [];
+}
+
 export async function listMyBookings() {
   const u = await getUser(); if (!u) return [];
   const { data, error } = await supabase.from("bookings")
@@ -463,13 +523,23 @@ export async function adminListBookings(opts: { status?: string; limit?: number 
   const bookings = data || [];
   if (!bookings.length) return bookings;
   const ids = bookings.map((b: any) => b.id);
-  const { data: txs } = await supabase.from("transactions").select("*").in("booking_id", ids);
-  const byBooking = new Map<string, any[]>();
+  const [{ data: txs }, proofs] = await Promise.all([
+    supabase.from("transactions").select("*").in("booking_id", ids),
+    adminListPaymentProofs(ids),
+  ]);
+  const txByBooking = new Map<string, any[]>();
   (txs || []).forEach((t: any) => {
-    const arr = byBooking.get(t.booking_id) || [];
-    arr.push(t); byBooking.set(t.booking_id, arr);
+    const arr = txByBooking.get(t.booking_id) || []; arr.push(t); txByBooking.set(t.booking_id, arr);
   });
-  return bookings.map((b: any) => ({ ...b, transactions: byBooking.get(b.id) || [] }));
+  const proofsByBooking = new Map<string, any[]>();
+  (proofs || []).forEach((p: any) => {
+    const arr = proofsByBooking.get(p.booking_id) || []; arr.push(p); proofsByBooking.set(p.booking_id, arr);
+  });
+  return bookings.map((b: any) => ({
+    ...b,
+    transactions: txByBooking.get(b.id) || [],
+    payment_proofs: proofsByBooking.get(b.id) || [],
+  }));
 }
 export async function adminUpdateBooking(id: string, patch: any) {
   const { error } = await supabase.from("bookings").update(patch).eq("id", id);

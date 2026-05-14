@@ -126,14 +126,20 @@ function EditDialog({ row, fields, onSave, onClose }: { row: any; fields: FieldD
   function submit(e: React.FormEvent) {
     e.preventDefault();
     const out: any = {};
-    fields.forEach((f) => {
+    const missing: string[] = [];
+    for (const f of fields) {
       let val = v[f.key];
-      if (val === "" || val == null) { if (!f.optional) return; out[f.key] = null; return; }
+      const empty = val === "" || val == null;
+      if (empty) {
+        if (f.optional) { out[f.key] = null; continue; }
+        missing.push(f.label || f.key); continue;
+      }
       if (f.type === "number") val = Number(val);
-      if (f.type === "json") { try { val = JSON.parse(val); } catch { toast.error(`${f.key}: invalid JSON`); throw new Error("bad json"); } }
+      if (f.type === "json") { try { val = JSON.parse(val); } catch { toast.error(`${f.key}: invalid JSON`); return; } }
       if (f.type === "boolean") val = !!val;
       out[f.key] = val;
-    });
+    }
+    if (missing.length) { toast.error(`Required: ${missing.join(", ")}`); return; }
     onSave(out);
   }
   return (

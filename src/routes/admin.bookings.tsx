@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { adminListBookings, adminUpdateBooking, adminMarkTransactionPaid, fmtBDT } from "@/lib/data";
+import { adminListBookings, adminUpdateBooking, adminMarkTransactionPaid, adminApprovePaymentProof, adminRejectPaymentProof, fmtBDT } from "@/lib/data";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/bookings")({ component: BookingsPage });
@@ -27,6 +27,14 @@ function BookingsPage() {
 
   async function markTxPaid(txId: string) {
     try { await adminMarkTransactionPaid(txId); toast.success("Marked paid"); refresh(); }
+    catch (e: any) { toast.error(e.message); }
+  }
+  async function approveProof(id: string) {
+    try { await adminApprovePaymentProof(id); toast.success("Proof approved & payment recorded"); refresh(); }
+    catch (e: any) { toast.error(e.message); }
+  }
+  async function rejectProof(id: string) {
+    try { await adminRejectPaymentProof(id); toast.success("Proof rejected"); refresh(); }
     catch (e: any) { toast.error(e.message); }
   }
 
@@ -81,6 +89,27 @@ function BookingsPage() {
                       <span>{tx.gateway} · {tx.status} · {fmtBDT(tx.amount)}</span>
                       {tx.status === "initiated" && (
                         <button onClick={() => markTxPaid(tx.id)} className="btn-primary" style={{ fontSize: 11, padding: "2px 10px" }}>Mark paid</button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {b.payment_proofs?.length > 0 && (
+                <div style={{ marginTop: 10, padding: 10, background: "#fff7ed", borderRadius: 8, border: "1px solid #fed7aa" }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>Customer payment proofs</div>
+                  {b.payment_proofs.map((p: any) => (
+                    <div key={p.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12, marginTop: 6, gap: 8 }}>
+                      <div>
+                        <div><strong>{p.reference || "(no ref)"}</strong> — {fmtBDT(p.amount || 0)} · <span style={{ color: p.status === "approved" ? "#15803d" : p.status === "rejected" ? "#b91c1c" : "#b45309" }}>{p.status}</span></div>
+                        {p.image_url && <a href={p.image_url} target="_blank" rel="noreferrer" style={{ color: "var(--pink)" }}>View screenshot</a>}
+                        {p.notes && <div style={{ color: "#666" }}>{p.notes}</div>}
+                      </div>
+                      {p.status === "pending" && (
+                        <div style={{ display: "flex", gap: 6 }}>
+                          <button onClick={() => approveProof(p.id)} className="btn-primary" style={{ fontSize: 11, padding: "2px 10px" }}>Approve</button>
+                          <button onClick={() => rejectProof(p.id)} style={{ fontSize: 11, padding: "2px 10px", border: "1px solid #fecaca", background: "#fff", color: "#b91c1c", borderRadius: 6 }}>Reject</button>
+                        </div>
                       )}
                     </div>
                   ))}
