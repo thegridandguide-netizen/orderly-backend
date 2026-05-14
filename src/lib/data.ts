@@ -468,10 +468,11 @@ export async function adminApprovePaymentProof(proofId: string) {
   if (error) throw error;
   if (proof.status === "approved") return;
   // 1. Insert a successful transaction
+  const amt = Number(proof.amount || 0);
   const { data: tx, error: txErr } = await supabase.from("transactions").insert({
     booking_id: proof.booking_id, user_id: proof.user_id,
     gateway: "manual", status: "success",
-    amount: proof.amount, currency: "BDT", reference: proof.reference,
+    amount: amt, currency: "BDT", reference: proof.reference,
   }).select().single();
   if (txErr) throw txErr;
   // 2. Bump booking amount_paid + status
@@ -495,6 +496,9 @@ export async function adminListPaymentProofs(booking_ids: string[]) {
   if (!booking_ids.length) return [];
   const { data } = await supabase.from("payment_proofs").select("*").in("booking_id", booking_ids);
   return data || [];
+}
+
+export async function listMyBookings() {
   const u = await getUser(); if (!u) return [];
   const { data, error } = await supabase.from("bookings")
     .select("*, booking_items(*)").order("created_at", { ascending: false });
