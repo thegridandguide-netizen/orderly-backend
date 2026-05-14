@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { adminListBookings, adminUpdateBooking, adminMarkTransactionPaid, fmtBDT } from "@/lib/data";
+import { adminListBookings, adminUpdateBooking, adminMarkTransactionPaid, adminApprovePaymentProof, adminRejectPaymentProof, fmtBDT } from "@/lib/data";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/bookings")({ component: BookingsPage });
