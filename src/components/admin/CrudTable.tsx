@@ -1,3 +1,21 @@
+/**
+ * CrudTable — generic admin list/create/edit/delete UI.
+ *
+ * Each admin route declares a `fields` schema describing one column per
+ * editable attribute. Supported field types:
+ *   - text | number | boolean | date | json
+ *   - select   → static `options: {label,value}[]`
+ *   - select   → dynamic `optionsAsync: () => Promise<{label,value}[]>`
+ *
+ * Validation: required fields trigger a toast before submit (see handleSubmit).
+ * JSON fields are parsed safely; parse errors surface as toasts instead of
+ * throwing.
+ *
+ * The component is intentionally table-agnostic: it calls adminList /
+ * adminCreate / adminUpdate / adminDelete from data.ts which dispatch on the
+ * `table` prop. Add a new admin screen by creating a route that renders
+ * <CrudTable table="my_table" fields={...} /> — no extra wiring needed.
+ */
 import { useEffect, useState } from "react";
 import { adminList, adminCreate, adminUpdate, adminDelete, type AdminTable } from "@/lib/data";
 import { toast } from "sonner";

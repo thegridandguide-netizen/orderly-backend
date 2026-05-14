@@ -1,3 +1,11 @@
+/**
+ * /admin/bookings — admin review of bookings + payment proofs.
+ *
+ * Admins can: edit booking status manually, mark a transaction paid, or
+ * approve/reject any pending payment_proofs row submitted by the customer.
+ * Approving a proof inserts a transactions row and bumps amount_paid,
+ * which in turn advances booking.status (see adminApprovePaymentProof).
+ */
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { adminListBookings, adminUpdateBooking, adminMarkTransactionPaid, adminApprovePaymentProof, adminRejectPaymentProof, fmtBDT } from "@/lib/data";

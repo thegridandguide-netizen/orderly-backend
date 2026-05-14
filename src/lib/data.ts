@@ -1,3 +1,27 @@
+/**
+ * data.ts — Application data layer.
+ *
+ * Wraps every Supabase call used by the UI. Keeping all queries here gives us:
+ *   1. A single place to enforce shapes / typing for the front-end.
+ *   2. A clear separation between presentation (routes) and persistence.
+ *   3. Easy substitution / mocking for tests.
+ *
+ * Sections (search by header):
+ *   - Catalogue reads        (venues, vendor listings, categories, photos)
+ *   - Cart & wishlist        (per-user mutations)
+ *   - Checkout & pricing     (computePricing + createBooking)
+ *   - My-Bookings & Payments (listMyBookings, submitPaymentProof)
+ *   - Profile                (getMyProfile / updateMyProfile — defensive upsert)
+ *   - Admin CRUD             (generic adminList/Create/Update/Delete + booking-specific helpers)
+ *
+ * Pricing model: see computePricing() — applies all active rows of
+ * `pricing_rules` against the cart subtotal. Rule types ending in
+ * `_percent` are applied as percentages; `_flat` as fixed amounts.
+ *
+ * Payment model: manual. Customers submit a `payment_proofs` row; admins
+ * approve via adminApprovePaymentProof which inserts a `transactions` row
+ * and advances `bookings.status` based on the new amount_paid balance.
+ */
 import { supabase, fmtBDT } from "./supabase";
 export { fmtBDT };
 

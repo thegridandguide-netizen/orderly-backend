@@ -1,3 +1,11 @@
+/**
+ * /my-bookings — customer's booking history + payment proof submission.
+ *
+ * For each booking, customer can submit a payment proof (reference +
+ * screenshot URL + amount). Proof status: pending → approved/rejected by
+ * admin from /admin/bookings. Approval auto-advances booking status to
+ * `confirmed` (partial) or `completed` (paid in full).
+ */
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { listMyBookings, listMyPaymentProofs, submitPaymentProof, fmtBDT } from "@/lib/data";
