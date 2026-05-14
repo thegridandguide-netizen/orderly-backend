@@ -523,13 +523,23 @@ export async function adminListBookings(opts: { status?: string; limit?: number 
   const bookings = data || [];
   if (!bookings.length) return bookings;
   const ids = bookings.map((b: any) => b.id);
-  const { data: txs } = await supabase.from("transactions").select("*").in("booking_id", ids);
-  const byBooking = new Map<string, any[]>();
+  const [{ data: txs }, proofs] = await Promise.all([
+    supabase.from("transactions").select("*").in("booking_id", ids),
+    adminListPaymentProofs(ids),
+  ]);
+  const txByBooking = new Map<string, any[]>();
   (txs || []).forEach((t: any) => {
-    const arr = byBooking.get(t.booking_id) || [];
-    arr.push(t); byBooking.set(t.booking_id, arr);
+    const arr = txByBooking.get(t.booking_id) || []; arr.push(t); txByBooking.set(t.booking_id, arr);
   });
-  return bookings.map((b: any) => ({ ...b, transactions: byBooking.get(b.id) || [] }));
+  const proofsByBooking = new Map<string, any[]>();
+  (proofs || []).forEach((p: any) => {
+    const arr = proofsByBooking.get(p.booking_id) || []; arr.push(p); proofsByBooking.set(p.booking_id, arr);
+  });
+  return bookings.map((b: any) => ({
+    ...b,
+    transactions: txByBooking.get(b.id) || [],
+    payment_proofs: proofsByBooking.get(b.id) || [],
+  }));
 }
 export async function adminUpdateBooking(id: string, patch: any) {
   const { error } = await supabase.from("bookings").update(patch).eq("id", id);
