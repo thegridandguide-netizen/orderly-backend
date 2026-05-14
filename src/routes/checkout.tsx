@@ -1,3 +1,11 @@
+/**
+ * /checkout — converts the user's cart into a booking.
+ *
+ * Flow: load cart → computePricing(rules) → collect contact/event details →
+ * createBooking() which atomically inserts `bookings` + `booking_items` and
+ * snapshots line totals so future price changes don't mutate history.
+ * Payment is handled afterwards on /my-bookings (manual proof workflow).
+ */
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { listCart, createBooking, computePricing, fmtBDT, type CartItem, type PricingBreakdownLine } from "@/lib/data";
