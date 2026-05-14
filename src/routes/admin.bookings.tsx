@@ -29,6 +29,14 @@ function BookingsPage() {
     try { await adminMarkTransactionPaid(txId); toast.success("Marked paid"); refresh(); }
     catch (e: any) { toast.error(e.message); }
   }
+  async function approveProof(id: string) {
+    try { await adminApprovePaymentProof(id); toast.success("Proof approved & payment recorded"); refresh(); }
+    catch (e: any) { toast.error(e.message); }
+  }
+  async function rejectProof(id: string) {
+    try { await adminRejectPaymentProof(id); toast.success("Proof rejected"); refresh(); }
+    catch (e: any) { toast.error(e.message); }
+  }
 
   return (
     <div>
