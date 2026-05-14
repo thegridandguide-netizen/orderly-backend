@@ -166,3 +166,15 @@ src/
   integrations/supabase/   Auto-generated client + types
 supabase/migrations/  SQL migrations (seed data, schema)
 ```
+
+## Documentation
+
+Full specification documents live in `docs/`:
+
+- [`docs/SRS.md`](docs/SRS.md) — Software Requirements Specification (functional & non-functional requirements, acceptance criteria).
+- [`docs/DFD.md`](docs/DFD.md) — Data Flow Diagrams (Level 0 context, Level 1 processes, Level 2 zoom-ins for Pricing Engine and Payment Verification).
+
+Inline code documentation: every major module carries a top-of-file docstring
+explaining its responsibilities — see `src/lib/data.ts`,
+`src/components/admin/CrudTable.tsx`, `src/routes/checkout.tsx`,
+`src/routes/my-bookings.tsx`, and `src/routes/admin.bookings.tsx`.
