@@ -58,14 +58,15 @@ function toVenueCard(v: any): VenueCard {
 }
 
 export async function loadVenues(opts: {
-  city?: string; handpicked?: boolean; minRating?: number; venueType?: string;
+  city?: string; area?: string; handpicked?: boolean; minRating?: number; venueType?: string;
   limit?: number; offset?: number; sort?: string;
 } = {}): Promise<VenueCard[]> {
-  const { city, handpicked, minRating, venueType, limit = 12, offset = 0, sort = "recommended" } = opts;
+  const { city, area, handpicked, minRating, venueType, limit = 12, offset = 0, sort = "recommended" } = opts;
   let q = supabase.from("venues").select(
     "id,name,city,area,venue_type,tags,handpicked,veg_price,non_veg_price,rental_price,capacity_min,capacity_max,rooms,rating_avg,rating_count,cover_image_url"
   );
   if (city) q = q.eq("city", city);
+  if (area && area.trim()) q = q.ilike("area", `%${area.trim()}%`);
   if (handpicked != null) q = q.eq("handpicked", handpicked);
   if (venueType) q = q.eq("venue_type", venueType);
   if (minRating != null) q = q.gte("rating_avg", minRating);
