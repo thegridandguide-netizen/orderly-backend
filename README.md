@@ -178,3 +178,8 @@ Inline code documentation: every major module carries a top-of-file docstring
 explaining its responsibilities — see `src/lib/data.ts`,
 `src/components/admin/CrudTable.tsx`, `src/routes/checkout.tsx`,
 `src/routes/my-bookings.tsx`, and `src/routes/admin.bookings.tsx`.
+
+## Recent fixes (May 15, 2026)
+- **Profile page double navbar** — the route no longer wraps itself in `<Layout>` (the root layout already does).
+- **Bookings infinite-recursion RLS error** — `bookings` ↔ `booking_items` policies now go through `SECURITY DEFINER` helpers (`user_owns_booking`, `is_vendor_for_booking`, `vendor_owns_listing`) so Postgres no longer recurses when `/my-bookings` loads nested booking items.
+- **BD-local filters everywhere** — `src/routes/venues.tsx` and `src/routes/vendors.tsx` import `CITIES`, `VENUE_TYPES`, and `VENDOR_CATEGORIES` from `src/lib/filters.ts`, the same constants used by the admin dropdowns. Venues also support an `area` text filter (Gulshan, Banani, …) backed by `venues.area ILIKE %q%`.
