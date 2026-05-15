@@ -753,6 +753,9 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_vendor_for_booking: { Args: { _booking_id: string }; Returns: boolean }
+      user_owns_booking: { Args: { _booking_id: string }; Returns: boolean }
+      vendor_owns_listing: { Args: { _listing_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "vendor" | "customer"
