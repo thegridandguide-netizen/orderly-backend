@@ -23,7 +23,7 @@ export const Route = createFileRoute("/admin/venues")({
         { key: "non_veg_price", type: "number", optional: true },
         { key: "rental_price", type: "number", optional: true },
         { key: "cover_image_url", optional: true },
-        { key: "handpicked", type: "boolean" },
+        { key: "gallery_image_urls", optional: true },
         { key: "is_active", type: "boolean" },
       ]}
     />

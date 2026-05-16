@@ -2,17 +2,17 @@
  * data.ts — Application data layer.
  *
  * Wraps every Supabase call used by the UI. Keeping all queries here gives us:
- *   1. A single place to enforce shapes / typing for the front-end.
- *   2. A clear separation between presentation (routes) and persistence.
- *   3. Easy substitution / mocking for tests.
+ * 1. A single place to enforce shapes / typing for the front-end.
+ * 2. A clear separation between presentation (routes) and persistence.
+ * 3. Easy substitution / mocking for tests.
  *
  * Sections (search by header):
- *   - Catalogue reads        (venues, vendor listings, categories, photos)
- *   - Cart & wishlist        (per-user mutations)
- *   - Checkout & pricing     (computePricing + createBooking)
- *   - My-Bookings & Payments (listMyBookings, submitPaymentProof)
- *   - Profile                (getMyProfile / updateMyProfile — defensive upsert)
- *   - Admin CRUD             (generic adminList/Create/Update/Delete + booking-specific helpers)
+ * - Catalogue reads        (venues, vendor listings, categories, photos)
+ * - Cart & wishlist        (per-user mutations)
+ * - Checkout & pricing     (computePricing + createBooking)
+ * - My-Bookings & Payments (listMyBookings, submitPaymentProof)
+ * - Profile                (getMyProfile / updateMyProfile — defensive upsert)
+ * - Admin CRUD             (generic adminList/Create/Update/Delete + booking-specific helpers)
  *
  * Pricing model: see computePricing() — applies all active rows of
  * `pricing_rules` against the cart subtotal. Rule types ending in
@@ -23,7 +23,7 @@
  * and advances `bookings.status` based on the new amount_paid balance.
  */
 import { supabase, fmtBDT } from "./supabase";
-export { fmtBDT };
+export { supabase, fmtBDT };
 
 export type VenueCard = {
   id: string;
@@ -62,9 +62,12 @@ export async function loadVenues(opts: {
   limit?: number; offset?: number; sort?: string;
 } = {}): Promise<VenueCard[]> {
   const { city, area, handpicked, minRating, venueType, limit = 12, offset = 0, sort = "recommended" } = opts;
+  
+  // FIX: Added gallery_image_urls and gallery_layouts to the select statement
   let q = supabase.from("venues").select(
-    "id,name,city,area,venue_type,tags,handpicked,veg_price,non_veg_price,rental_price,capacity_min,capacity_max,rooms,rating_avg,rating_count,cover_image_url"
+    "id,name,city,area,venue_type,tags,handpicked,veg_price,non_veg_price,rental_price,capacity_min,capacity_max,rooms,rating_avg,rating_count,cover_image_url,gallery_image_urls,gallery_layouts"
   );
+  
   if (city) q = q.eq("city", city);
   if (area && area.trim()) q = q.ilike("area", `%${area.trim()}%`);
   if (handpicked != null) q = q.eq("handpicked", handpicked);
@@ -81,22 +84,25 @@ export async function loadVenues(opts: {
   return (data || []).map(toVenueCard);
 }
 
+export async function loadSimilarVenues(opts: { city?: string; excludeId?: string; limit?: number } = {}) {
+  const { city, excludeId, limit = 6 } = opts;
+  
+  // FIX: Added gallery_image_urls and gallery_layouts here as well for similar items recommendation layout rows
+  let q = supabase.from("venues").select(
+    "id,name,city,area,tags,handpicked,veg_price,non_veg_price,rental_price,capacity_min,capacity_max,rooms,rating_avg,cover_image_url,gallery_image_urls,gallery_layouts"
+  ).order("rating_avg", { ascending: false }).limit(limit + 1);
+  
+  if (city) q = q.eq("city", city);
+  const { data, error } = await q;
+  if (error) throw error;
+  return (data || []).filter((v: any) => v.id !== excludeId).slice(0, limit).map(toVenueCard);
+}
+
 export async function loadVenueById(id: string) {
   if (!id) return null;
   const { data, error } = await supabase.from("venues").select("*").eq("id", id).maybeSingle();
   if (error) throw error;
   return data;
-}
-
-export async function loadSimilarVenues(opts: { city?: string; excludeId?: string; limit?: number } = {}) {
-  const { city, excludeId, limit = 6 } = opts;
-  let q = supabase.from("venues").select(
-    "id,name,city,area,tags,handpicked,veg_price,non_veg_price,rental_price,capacity_min,capacity_max,rooms,rating_avg,cover_image_url"
-  ).order("rating_avg", { ascending: false }).limit(limit + 1);
-  if (city) q = q.eq("city", city);
-  const { data, error } = await q;
-  if (error) throw error;
-  return (data || []).filter((v: any) => v.id !== excludeId).slice(0, limit).map(toVenueCard);
 }
 
 export async function loadVendors(opts: {
@@ -301,12 +307,20 @@ export type CartItem = {
 };
 
 export async function listCart(): Promise<CartItem[]> {
-  const u = await getUser(); if (!u) return [];
-  const { data: items, error } = await supabase.from("cart_items").select("*").order("created_at", { ascending: false });
+  const u = await getUser(); 
+  if (!u) return [];
+
+  const { data: items, error } = await supabase
+    .from("cart_items")
+    .select("*")
+    .order("created_at", { ascending: false });
+
   if (error) throw error;
   if (!items?.length) return [];
+
   const venueIds = items.filter((i) => i.target_type === "venue").map((i) => i.target_id);
   const vendorIds = items.filter((i) => i.target_type === "vendor").map((i) => i.target_id);
+
   const [venues, vendors] = await Promise.all([
     venueIds.length
       ? supabase.from("venues").select("id,name,city,area,cover_image_url,veg_price,non_veg_price,rental_price").in("id", venueIds)
@@ -315,16 +329,34 @@ export async function listCart(): Promise<CartItem[]> {
       ? supabase.from("vendor_listings").select("id,title,category,city,cover_image_url,price_from").in("id", vendorIds)
       : Promise.resolve({ data: [] as any[] }),
   ]);
+
   const vMap = new Map((venues.data || []).map((v: any) => [v.id, v]));
   const vlMap = new Map((vendors.data || []).map((v: any) => [v.id, v]));
+
   return items.map((it: any) => {
     if (it.target_type === "venue") {
       const v: any = vMap.get(it.target_id);
       const unit_price = v ? (v.rental_price ?? v.veg_price ?? v.non_veg_price ?? 0) : 0;
-      return { ...it, title: v?.name || "Venue", subtitle: [v?.area, v?.city].filter(Boolean).join(", "), image: v?.cover_image_url, unit_price };
+
+      return { 
+        ...it, 
+        title: v?.name || "Venue", 
+        subtitle: [v?.area, v?.city].filter(Boolean).join(", "), 
+        image: v?.cover_image_url, 
+        unit_price,
+        veg_price: v?.veg_price,
+        non_veg_price: v?.non_veg_price,
+      };
     }
+
     const vl: any = vlMap.get(it.target_id);
-    return { ...it, title: vl?.title || "Service", subtitle: [vl?.category, vl?.city].filter(Boolean).join(" · "), image: vl?.cover_image_url, unit_price: vl?.price_from ?? 0 };
+    return { 
+      ...it, 
+      title: vl?.title || "Service", 
+      subtitle: [vl?.category, vl?.city].filter(Boolean).join(" · "), 
+      image: vl?.cover_image_url, 
+      unit_price: vl?.price_from ?? 0 
+    };
   });
 }
 export async function updateCartQty(id: string, quantity: number) {
@@ -352,7 +384,7 @@ export async function cartCount() {
 export type PricingBreakdownLine = { name: string; rule_type: "tax" | "discount" | "fee"; amount: number };
 
 /** Fetch active pricing rules and compute taxes/discounts/fees for a subtotal.
- *  `value` is interpreted as a percentage of the subtotal (e.g. value=15 → 15%). */
+ * `value` is interpreted as a percentage of the subtotal (e.g. value=15 → 15%). */
 export async function computePricing(subtotal: number): Promise<{
   breakdown: PricingBreakdownLine[]; tax_total: number; discount_total: number;
   fee_total: number; total: number;
@@ -388,7 +420,7 @@ export async function computePricing(subtotal: number): Promise<{
 }
 
 /** Create a booking from cart items: inserts booking + booking_items + an
- *  initiated transaction, then clears the consumed cart rows. */
+ * initiated transaction, then clears the consumed cart rows. */
 export async function createBooking(p: {
   items: Array<CartItem & { cart_id?: string }>;
   event_date?: string; guest_count?: number; contact_phone?: string; notes?: string;
@@ -449,7 +481,7 @@ export async function createBooking(p: {
 }
 
 /** Admin action: mark a transaction as successful and advance the booking
- *  to deposit_paid / paid based on the amount paid vs total. */
+ * to deposit_paid / paid based on the amount paid vs total. */
 export async function adminMarkTransactionPaid(transactionId: string) {
   const { data: tx, error } = await supabase.from("transactions")
     .update({ status: "success" }).eq("id", transactionId).select().single();
@@ -465,7 +497,7 @@ export async function adminMarkTransactionPaid(transactionId: string) {
 
 // ─── payment proofs (manual gateways: bKash/Nagad/bank etc.) ──
 /** Customer submits a payment proof (txn ref + optional screenshot URL).
- *  Admin reviews from /admin/bookings and approves → marks transaction paid. */
+ * Admin reviews from /admin/bookings and approves → marks transaction paid. */
 export async function submitPaymentProof(p: {
   booking_id: string; amount: number; reference: string; image_url?: string; notes?: string;
 }) {
@@ -486,7 +518,7 @@ export async function listMyPaymentProofs(booking_id: string) {
 }
 
 /** Admin approves a payment proof → opens a "success" transaction and
- *  recomputes the booking status via adminMarkTransactionPaid logic. */
+ * recomputes the booking status via adminMarkTransactionPaid logic. */
 export async function adminApprovePaymentProof(proofId: string) {
   const { data: proof, error } = await supabase.from("payment_proofs")
     .select("*").eq("id", proofId).single();
@@ -572,7 +604,7 @@ export async function adminUpdateBooking(id: string, patch: any) {
 }
 // ── current user profile ──
 /** Fetch profile for the signed-in user. If the row is missing (legacy users
- *  created before the auto-trigger existed), upsert a stub row first. */
+ * created before the auto-trigger existed), upsert a stub row first. */
 export async function getMyProfile() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
@@ -636,4 +668,33 @@ export async function adminStats() {
   const { data: revenue } = await supabase.from("bookings").select("amount_paid");
   counts.revenue = (revenue || []).reduce((s: number, b: any) => s + Number(b.amount_paid || 0), 0);
   return counts;
+}
+/**
+ * Uploads a raw File object (like a .jpg) to the Supabase storage bucket
+ * and returns its absolute public URL string.
+ */
+export async function uploadVenueImage(file: File): Promise<string> {
+  // Generate a distinct randomized file name to prevent accidental caching or overwrites
+  const fileExt = file.name.split('.').pop() || 'jpg';
+  const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+  const filePath = `venues/${fileName}`;
+
+  // Upload raw file binary to the 'venue-images' bucket
+  const { data, error } = await supabase.storage
+    .from('venue-images')
+    .upload(filePath, file, {
+      cacheControl: '3600',
+      upsert: false
+    });
+
+  if (error) {
+    throw new Error(`File upload failed: ${error.message}`);
+  }
+
+  // Retrieve and return the permanent public link address
+  const { data: publicUrlData } = supabase.storage
+    .from('venue-images')
+    .getPublicUrl(filePath);
+
+  return publicUrlData.publicUrl;
 }

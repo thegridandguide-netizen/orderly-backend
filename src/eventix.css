@@ -626,6 +626,21 @@
 .vd-lightbox .vl-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.15);color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:22px;cursor:pointer;}
 .vd-lightbox .vl-prev{left:24px;}
 .vd-lightbox .vl-next{right:24px;}
+@media screen {
+  .receipt-print-only { display: none !important; }
+}
+
+@media print {
+  body * { visibility: hidden !important; }
+  .receipt-print-only, .receipt-print-only * { visibility: visible !important; }
+  .receipt-print-only {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    display: block !important;
+  }
+}
 
 @media (max-width:900px){
   .vd-cols{grid-template-columns:1fr;}

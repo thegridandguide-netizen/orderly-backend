@@ -11,7 +11,7 @@ export const Route = createFileRoute("/admin/transactions")({
       fields={[
         { key: "booking_id" },
         { key: "user_id" },
-        { key: "gateway", type: "select", options: ["manual", "bkash", "nagad", "rocket", "bank", "card", "stripe"] },
+        { key: "gateway", type: "select", options: ["bkash", "nagad", "rocket", "bank", "card", "manual"] },
         { key: "status", type: "select", options: ["initiated", "success", "failed", "refunded"] },
         { key: "amount", type: "number" },
         { key: "currency" },

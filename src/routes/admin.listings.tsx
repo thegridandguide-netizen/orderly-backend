@@ -17,6 +17,7 @@ export const Route = createFileRoute("/admin/listings")({
         { key: "price_from", type: "number", optional: true },
         { key: "price_to", type: "number", optional: true },
         { key: "cover_image_url", optional: true },
+        { key: "gallery_image_urls", optional: true },
         { key: "badge", optional: true },
         { key: "vendor_profile_id", label: "Vendor", type: "select", optionsAsync: loadVendorProfileOptions, optional: true },
         { key: "is_active", type: "boolean" },
