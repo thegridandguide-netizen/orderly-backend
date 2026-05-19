@@ -1,0 +1,121 @@
+classDiagram
+    class Profile {
+        +UUID id
+        +string full_name
+        +string phone
+        +string city
+        +string avatar_url
+        +updateProfile()
+    }
+    class UserRole {
+        +UUID id
+        +UUID user_id
+        +AppRole role
+    }
+    class Venue {
+        +UUID id
+        +string name
+        +string city
+        +string area
+        +string venue_type
+        +int capacity
+        +decimal base_price
+        +list~Photo~ gallery
+    }
+    class VendorProfile {
+        +UUID id
+        +UUID user_id
+        +string business_name
+        +string city
+    }
+    class VendorListing {
+        +UUID id
+        +UUID vendor_profile_id
+        +UUID category_id
+        +string title
+        +string city
+        +decimal base_price
+        +bool is_active
+    }
+    class EventCategory {
+        +UUID id
+        +string slug
+        +string name
+    }
+    class CartItem {
+        +UUID id
+        +UUID user_id
+        +UUID venue_id
+        +UUID listing_id
+        +int quantity
+        +decimal lineTotal()
+    }
+    class Booking {
+        +UUID id
+        +UUID user_id
+        +decimal total_amount
+        +decimal amount_paid
+        +BookingStatus status
+        +datetime created_at
+        +addItem()
+        +applyPricing()
+        +confirm()
+    }
+    class BookingItem {
+        +UUID id
+        +UUID booking_id
+        +decimal unit_price
+        +int quantity
+    }
+    class PaymentProof {
+        +UUID id
+        +UUID booking_id
+        +string reference
+        +string screenshot_url
+        +decimal amount
+        +ProofStatus status
+        +approve()
+        +reject()
+    }
+    class Transaction {
+        +UUID id
+        +UUID booking_id
+        +decimal amount
+        +string method
+    }
+    class PricingRule {
+        +UUID id
+        +RuleType rule_type
+        +Scope scope
+        +decimal value
+        +bool is_active
+        +apply(subtotal)
+    }
+    class Album {
+        +UUID id
+        +string title
+    }
+    class Photo {
+        +UUID id
+        +UUID album_id
+        +string url
+    }
+    class Review {
+        +UUID id
+        +int rating
+        +string body
+    }
+
+    Profile "1" --> "0..*" UserRole
+    Profile "1" --> "0..*" CartItem
+    Profile "1" --> "0..*" Booking
+    Profile "0..1" --> "0..1" VendorProfile
+    VendorProfile "1" --> "0..*" VendorListing
+    EventCategory "1" --> "0..*" VendorListing
+    Booking "1" --> "1..*" BookingItem
+    Booking "1" --> "0..*" PaymentProof
+    Booking "1" --> "0..*" Transaction
+    Venue "1" --> "0..*" BookingItem
+    VendorListing "1" --> "0..*" BookingItem
+    Album "1" --> "0..*" Photo
+    PricingRule ..> Booking : applied at checkout

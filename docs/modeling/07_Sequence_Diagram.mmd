@@ -1,0 +1,42 @@
+sequenceDiagram
+    autonumber
+    actor C as Customer
+    participant UI as Web App (TanStack)
+    participant SF as Server Function
+    participant DB as Postgres (RLS)
+    actor A as Admin
+
+    C->>UI: Browse /venues, apply filters
+    UI->>DB: select venues where city/area/type
+    DB-->>UI: venue rows
+    UI-->>C: render cards
+
+    C->>UI: Add to cart
+    UI->>DB: insert cart_items (RLS: self)
+    DB-->>UI: ok
+
+    C->>UI: Go to /checkout
+    UI->>SF: createBooking(cart)
+    SF->>DB: load pricing_rules (active)
+    DB-->>SF: rules
+    SF->>SF: compute breakdown
+    SF->>DB: insert bookings + booking_items (tx)
+    DB-->>SF: booking.id
+    SF-->>UI: booking summary
+    UI-->>C: redirect to /my-bookings
+
+    C->>UI: Submit payment proof
+    UI->>DB: insert payment_proofs (status=pending)
+    DB-->>UI: ok
+
+    A->>UI: Open /admin/bookings
+    UI->>DB: select payment_proofs where pending
+    DB-->>UI: proofs
+    A->>UI: Approve proof
+    UI->>SF: approveProof(proofId)
+    SF->>DB: insert transactions
+    SF->>DB: update bookings.amount_paid, status
+    SF->>DB: update payment_proofs.status=approved
+    DB-->>SF: ok
+    SF-->>UI: confirmation
+    UI-->>C: booking shows Confirmed/Completed

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-05-19T00:00:00.000Z" agent="Lovable" version="24.0.0">
+  <diagram name="Class Diagram" id="class">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="profile" value="Profile&#10;--&#10;+ id: UUID&#10;+ full_name: string&#10;+ phone: string&#10;+ city: string&#10;+ avatar_url: string&#10;--&#10;+ updateProfile()" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="220" height="160" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="role" value="UserRole&#10;--&#10;+ id: UUID&#10;+ user_id: UUID&#10;+ role: app_role" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="320" y="40" width="180" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="vp" value="VendorProfile&#10;--&#10;+ id: UUID&#10;+ user_id: UUID&#10;+ business_name: string&#10;+ city: string" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="240" width="220" height="140" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="vl" value="VendorListing&#10;--&#10;+ id: UUID&#10;+ vendor_profile_id: UUID&#10;+ category_id: UUID&#10;+ title: string&#10;+ city: string&#10;+ base_price: decimal&#10;+ is_active: bool" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="320" y="240" width="220" height="180" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="cat" value="EventCategory&#10;--&#10;+ id: UUID&#10;+ slug: string&#10;+ name: string" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="600" y="240" width="180" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="venue" value="Venue&#10;--&#10;+ id: UUID&#10;+ name: string&#10;+ city: string&#10;+ area: string&#10;+ venue_type: string&#10;+ capacity: int&#10;+ base_price: decimal" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="840" y="240" width="220" height="180" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="cart" value="CartItem&#10;--&#10;+ id: UUID&#10;+ user_id: UUID&#10;+ venue_id: UUID&#10;+ listing_id: UUID&#10;+ quantity: int&#10;--&#10;+ lineTotal()" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="560" y="40" width="220" height="160" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="booking" value="Booking&#10;--&#10;+ id: UUID&#10;+ user_id: UUID&#10;+ total_amount: decimal&#10;+ amount_paid: decimal&#10;+ status: BookingStatus&#10;+ created_at: datetime&#10;--&#10;+ addItem()&#10;+ applyPricing()&#10;+ confirm()" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="840" y="40" width="240" height="200" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="bi" value="BookingItem&#10;--&#10;+ id: UUID&#10;+ booking_id: UUID&#10;+ venue_id: UUID&#10;+ listing_id: UUID&#10;+ unit_price: decimal&#10;+ quantity: int" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="40" width="220" height="160" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="pp" value="PaymentProof&#10;--&#10;+ id: UUID&#10;+ booking_id: UUID&#10;+ reference: string&#10;+ screenshot_url: string&#10;+ amount: decimal&#10;+ status: ProofStatus&#10;--&#10;+ approve()&#10;+ reject()" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="840" y="480" width="240" height="200" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="tx" value="Transaction&#10;--&#10;+ id: UUID&#10;+ booking_id: UUID&#10;+ amount: decimal&#10;+ method: string" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="480" width="220" height="140" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="pr" value="PricingRule&#10;--&#10;+ id: UUID&#10;+ rule_type: RuleType&#10;+ scope: Scope&#10;+ value: decimal&#10;+ is_active: bool&#10;--&#10;+ apply(subtotal)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="560" y="480" width="220" height="180" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="album" value="Album&#10;--&#10;+ id: UUID&#10;+ title: string" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="480" width="180" height="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="photo" value="Photo&#10;--&#10;+ id: UUID&#10;+ album_id: UUID&#10;+ url: string" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="280" y="480" width="200" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e1" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="profile" target="role"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="profile" target="vp"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="profile" target="cart"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="profile" target="booking"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="vp" target="vl"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="cat" target="vl"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="booking" target="bi"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="booking" target="pp"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="booking" target="tx"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" style="endArrow=open;endFill=0;html=1;dashed=1;" edge="1" parent="1" source="pr" target="booking"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="venue" target="bi"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e12" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="vl" target="bi"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e13" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="album" target="photo"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Use Case" id="usecase">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" page="1" pageWidth="1200" pageHeight="800">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="aGuest" value="Guest" style="shape=umlActor;" vertex="1" parent="1"><mxGeometry x="40" y="80" width="40" height="80" as="geometry"/></mxCell>
+        <mxCell id="aCust" value="Customer" style="shape=umlActor;" vertex="1" parent="1"><mxGeometry x="40" y="240" width="40" height="80" as="geometry"/></mxCell>
+        <mxCell id="aVen" value="Vendor" style="shape=umlActor;" vertex="1" parent="1"><mxGeometry x="40" y="440" width="40" height="80" as="geometry"/></mxCell>
+        <mxCell id="aAdm" value="Admin" style="shape=umlActor;" vertex="1" parent="1"><mxGeometry x="1080" y="240" width="40" height="80" as="geometry"/></mxCell>
+        <mxCell id="sys" value="Booking Platform" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1"><mxGeometry x="180" y="40" width="840" height="640" as="geometry"/></mxCell>
+        <mxCell id="u1" value="Browse Venues/Vendors" style="ellipse;" vertex="1" parent="1"><mxGeometry x="220" y="80" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="u2" value="Filter by City/Area/Type" style="ellipse;" vertex="1" parent="1"><mxGeometry x="220" y="160" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="u3" value="Sign Up / Log In" style="ellipse;" vertex="1" parent="1"><mxGeometry x="220" y="240" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="u4" value="Add to Cart / Wishlist" style="ellipse;" vertex="1" parent="1"><mxGeometry x="500" y="80" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="u5" value="Checkout &amp; Create Booking" style="ellipse;" vertex="1" parent="1"><mxGeometry x="500" y="160" width="220" height="50" as="geometry"/></mxCell>
+        <mxCell id="u6" value="Submit Payment Proof" style="ellipse;" vertex="1" parent="1"><mxGeometry x="500" y="240" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="u7" value="View My Bookings" style="ellipse;" vertex="1" parent="1"><mxGeometry x="500" y="320" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="u8" value="Manage Profile" style="ellipse;" vertex="1" parent="1"><mxGeometry x="500" y="400" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="u9" value="Write Review" style="ellipse;" vertex="1" parent="1"><mxGeometry x="500" y="480" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="u10" value="Manage Listings" style="ellipse;" vertex="1" parent="1"><mxGeometry x="220" y="440" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="u11" value="Review Payment Proofs" style="ellipse;" vertex="1" parent="1"><mxGeometry x="780" y="80" width="220" height="50" as="geometry"/></mxCell>
+        <mxCell id="u12" value="CRUD Catalogue" style="ellipse;" vertex="1" parent="1"><mxGeometry x="780" y="160" width="220" height="50" as="geometry"/></mxCell>
+        <mxCell id="u13" value="Configure Pricing Rules" style="ellipse;" vertex="1" parent="1"><mxGeometry x="780" y="240" width="220" height="50" as="geometry"/></mxCell>
+        <mxCell id="u14" value="Manage User Roles" style="ellipse;" vertex="1" parent="1"><mxGeometry x="780" y="320" width="220" height="50" as="geometry"/></mxCell>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="aGuest" target="u1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="aGuest" target="u2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="aGuest" target="u3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="aCust" target="u4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="aCust" target="u5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="aCust" target="u6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="aCust" target="u7"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="aCust" target="u8"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="aCust" target="u9"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="aVen" target="u10"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="aAdm" target="u11"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="aAdm" target="u12"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="aAdm" target="u13"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="aAdm" target="u14"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="State - Booking" id="state">
+    <mxGraphModel dx="1200" dy="800" grid="1" page="1" pageWidth="1100" pageHeight="700">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="s0" value="" style="ellipse;fillColor=#000;" vertex="1" parent="1"><mxGeometry x="40" y="80" width="20" height="20" as="geometry"/></mxCell>
+        <mxCell id="s1" value="Pending" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;" vertex="1" parent="1"><mxGeometry x="140" y="70" width="140" height="50" as="geometry"/></mxCell>
+        <mxCell id="s2" value="AwaitingPayment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;" vertex="1" parent="1"><mxGeometry x="340" y="70" width="160" height="50" as="geometry"/></mxCell>
+        <mxCell id="s3" value="ProofSubmitted" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;" vertex="1" parent="1"><mxGeometry x="560" y="70" width="160" height="50" as="geometry"/></mxCell>
+        <mxCell id="s4" value="Confirmed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;" vertex="1" parent="1"><mxGeometry x="560" y="200" width="160" height="50" as="geometry"/></mxCell>
+        <mxCell id="s5" value="Completed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;" vertex="1" parent="1"><mxGeometry x="800" y="200" width="160" height="50" as="geometry"/></mxCell>
+        <mxCell id="s6" value="Cancelled" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;" vertex="1" parent="1"><mxGeometry x="340" y="330" width="160" height="50" as="geometry"/></mxCell>
+        <mxCell id="sF" value="" style="ellipse;fillColor=#000;strokeColor=#000;shape=endState;" vertex="1" parent="1"><mxGeometry x="1000" y="210" width="30" height="30" as="geometry"/></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" source="s0" target="s1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" source="s1" target="s2" value="save"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" source="s2" target="s3" value="upload proof"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" source="s3" target="s4" value="approve (partial)"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" source="s3" target="s5" value="approve (full)"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" source="s3" target="s1" value="reject"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" source="s4" target="s5" value="balance approved"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" source="s1" target="s6" value="cancel"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" source="s2" target="s6" value="timeout/cancel"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" source="s5" target="sF"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Sequence - Checkout" id="seq">
+    <mxGraphModel dx="1400" dy="900" grid="1" page="1" pageWidth="1400" pageHeight="900">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="L1" value="Customer" style="shape=umlLifeline;perimeter=lifelinePerimeter;" vertex="1" parent="1"><mxGeometry x="60" y="40" width="120" height="780" as="geometry"/></mxCell>
+        <mxCell id="L2" value="Web App" style="shape=umlLifeline;perimeter=lifelinePerimeter;" vertex="1" parent="1"><mxGeometry x="260" y="40" width="120" height="780" as="geometry"/></mxCell>
+        <mxCell id="L3" value="Server Fn" style="shape=umlLifeline;perimeter=lifelinePerimeter;" vertex="1" parent="1"><mxGeometry x="460" y="40" width="120" height="780" as="geometry"/></mxCell>
+        <mxCell id="L4" value="Postgres (RLS)" style="shape=umlLifeline;perimeter=lifelinePerimeter;" vertex="1" parent="1"><mxGeometry x="660" y="40" width="140" height="780" as="geometry"/></mxCell>
+        <mxCell id="L5" value="Admin" style="shape=umlLifeline;perimeter=lifelinePerimeter;" vertex="1" parent="1"><mxGeometry x="880" y="40" width="120" height="780" as="geometry"/></mxCell>
+
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" value="add to cart"><mxGeometry relative="1" as="geometry"><mxPoint x="120" y="120" as="sourcePoint"/><mxPoint x="320" y="120" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" value="insert cart_items"><mxGeometry relative="1" as="geometry"><mxPoint x="320" y="160" as="sourcePoint"/><mxPoint x="730" y="160" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" value="checkout()"><mxGeometry relative="1" as="geometry"><mxPoint x="120" y="220" as="sourcePoint"/><mxPoint x="320" y="220" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" value="createBooking()"><mxGeometry relative="1" as="geometry"><mxPoint x="320" y="260" as="sourcePoint"/><mxPoint x="520" y="260" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" value="load pricing_rules"><mxGeometry relative="1" as="geometry"><mxPoint x="520" y="300" as="sourcePoint"/><mxPoint x="730" y="300" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" value="insert booking + items"><mxGeometry relative="1" as="geometry"><mxPoint x="520" y="340" as="sourcePoint"/><mxPoint x="730" y="340" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" value="booking.id"><mxGeometry relative="1" as="geometry"><mxPoint x="520" y="380" as="sourcePoint"/><mxPoint x="320" y="380" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" value="submit payment proof"><mxGeometry relative="1" as="geometry"><mxPoint x="120" y="440" as="sourcePoint"/><mxPoint x="320" y="440" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" value="insert payment_proofs"><mxGeometry relative="1" as="geometry"><mxPoint x="320" y="480" as="sourcePoint"/><mxPoint x="730" y="480" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" value="approve()"><mxGeometry relative="1" as="geometry"><mxPoint x="940" y="540" as="sourcePoint"/><mxPoint x="520" y="540" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" value="insert transaction + update booking"><mxGeometry relative="1" as="geometry"><mxPoint x="520" y="580" as="sourcePoint"/><mxPoint x="730" y="580" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell style="endArrow=classic;html=1;" edge="1" parent="1" value="booking Confirmed/Completed"><mxGeometry relative="1" as="geometry"><mxPoint x="320" y="640" as="sourcePoint"/><mxPoint x="120" y="640" as="targetPoint"/></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

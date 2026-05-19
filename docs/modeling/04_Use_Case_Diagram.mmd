@@ -1,0 +1,46 @@
+graph LR
+    classDef actor fill:#e3f2fd,stroke:#1976d2,stroke-width:2px;
+    classDef usecase fill:#fff3e0,stroke:#f57c00;
+
+    Guest((Guest)):::actor
+    Customer((Customer)):::actor
+    Vendor((Vendor)):::actor
+    Admin((Admin)):::actor
+
+    subgraph Platform[Event & Venue Booking Platform]
+      UC1[Browse Venues / Vendors]:::usecase
+      UC2[Filter by City / Area / Type]:::usecase
+      UC3[Sign Up / Log In]:::usecase
+      UC4[Add to Cart / Wishlist]:::usecase
+      UC5[Checkout & Create Booking]:::usecase
+      UC6[Submit Payment Proof]:::usecase
+      UC7[View My Bookings]:::usecase
+      UC8[Manage Profile]:::usecase
+      UC9[Write Review]:::usecase
+      UC10[Manage Listings]:::usecase
+      UC11[Review Payment Proofs]:::usecase
+      UC12[CRUD Venues / Vendors / Categories]:::usecase
+      UC13[Configure Pricing Rules]:::usecase
+      UC14[Manage User Roles]:::usecase
+    end
+
+    Guest --> UC1
+    Guest --> UC2
+    Guest --> UC3
+
+    Customer --> UC1
+    Customer --> UC2
+    Customer --> UC4
+    Customer --> UC5
+    Customer --> UC6
+    Customer --> UC7
+    Customer --> UC8
+    Customer --> UC9
+
+    Vendor --> UC10
+    Vendor --> UC7
+
+    Admin --> UC11
+    Admin --> UC12
+    Admin --> UC13
+    Admin --> UC14

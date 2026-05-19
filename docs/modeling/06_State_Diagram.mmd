@@ -1,0 +1,13 @@
+stateDiagram-v2
+    [*] --> Pending : checkout created
+    Pending --> AwaitingPayment : booking saved
+    AwaitingPayment --> ProofSubmitted : customer uploads proof
+    ProofSubmitted --> Pending : admin rejects proof
+    ProofSubmitted --> Confirmed : admin approves (partial pay)
+    ProofSubmitted --> Completed : admin approves (fully paid)
+    Confirmed --> ProofSubmitted : customer submits another proof
+    Confirmed --> Completed : remaining balance approved
+    Pending --> Cancelled : customer/admin cancels
+    AwaitingPayment --> Cancelled : timeout / cancel
+    Completed --> [*]
+    Cancelled --> [*]

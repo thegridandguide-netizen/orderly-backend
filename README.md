@@ -174,10 +174,27 @@ Full specification documents live in `docs/`:
 - [`docs/SRS.md`](docs/SRS.md) — Software Requirements Specification (functional & non-functional requirements, acceptance criteria).
 - [`docs/DFD.md`](docs/DFD.md) — Data Flow Diagrams (Level 0 context, Level 1 processes, Level 2 zoom-ins for Pricing Engine and Payment Verification).
 
+### Project Modeling Package
+
+The full modeling bundle is available as downloadable artifacts (see chat) and mirrored in `docs/modeling/`:
+
+| # | Artifact | Format |
+|---|----------|--------|
+| 1 | Project Proposal | `01_Project_Proposal.md` |
+| 2 | UML original file (editable) | `02_UML.drawio.xml` — open in [diagrams.net](https://app.diagrams.net) |
+| 3 | ER Diagram | `03_ER_Diagram.mmd` (Mermaid) |
+| 4 | Use Case Diagram | `04_Use_Case_Diagram.mmd` |
+| 5 | Class Diagram | `05_Class_Diagram.mmd` |
+| 6 | State Diagram (Booking lifecycle) | `06_State_Diagram.mmd` |
+| 7 | Sequence Diagram (Checkout + Payment) | `07_Sequence_Diagram.mmd` |
+
+The `.drawio.xml` file contains four pages (Class, Use Case, State, Sequence) and is fully editable in draw.io / diagrams.net or VS Code's Draw.io Integration extension.
+
 Inline code documentation: every major module carries a top-of-file docstring
 explaining its responsibilities — see `src/lib/data.ts`,
 `src/components/admin/CrudTable.tsx`, `src/routes/checkout.tsx`,
 `src/routes/my-bookings.tsx`, and `src/routes/admin.bookings.tsx`.
+
 
 ## Recent fixes (May 15, 2026)
 - **Profile page double navbar** — the route no longer wraps itself in `<Layout>` (the root layout already does).

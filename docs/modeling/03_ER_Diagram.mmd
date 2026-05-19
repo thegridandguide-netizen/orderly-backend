@@ -1,0 +1,132 @@
+erDiagram
+    PROFILES ||--o{ USER_ROLES : "has"
+    PROFILES ||--o{ CART_ITEMS : "owns"
+    PROFILES ||--o{ WISHLIST_ITEMS : "owns"
+    PROFILES ||--o{ BOOKINGS : "places"
+    PROFILES ||--o{ REVIEWS : "writes"
+    PROFILES ||--o{ ENQUIRIES : "submits"
+    PROFILES ||--o| VENDOR_PROFILES : "may_be"
+
+    VENDOR_PROFILES ||--o{ VENDOR_LISTINGS : "offers"
+    EVENT_CATEGORIES ||--o{ VENDOR_LISTINGS : "classifies"
+    VENUES ||--o{ BOOKING_ITEMS : "booked_as"
+    VENDOR_LISTINGS ||--o{ BOOKING_ITEMS : "booked_as"
+    VENUES ||--o{ CART_ITEMS : "added_to"
+    VENDOR_LISTINGS ||--o{ CART_ITEMS : "added_to"
+
+    BOOKINGS ||--|{ BOOKING_ITEMS : "contains"
+    BOOKINGS ||--o{ PAYMENT_PROOFS : "verified_by"
+    BOOKINGS ||--o{ TRANSACTIONS : "settled_by"
+
+    ALBUMS ||--o{ PHOTOS : "contains"
+    VENUES ||--o{ PHOTOS : "showcased_in"
+    VENDOR_LISTINGS ||--o{ PHOTOS : "showcased_in"
+
+    PRICING_RULES ||..|| BOOKINGS : "applied_at_checkout"
+
+    PROFILES {
+        uuid id PK
+        text full_name
+        text phone
+        text city
+        text avatar_url
+    }
+    USER_ROLES {
+        uuid id PK
+        uuid user_id FK
+        app_role role
+    }
+    VENUES {
+        uuid id PK
+        text name
+        text city
+        text area
+        text venue_type
+        int capacity
+        numeric base_price
+    }
+    VENDOR_PROFILES {
+        uuid id PK
+        uuid user_id FK
+        text business_name
+        text city
+    }
+    VENDOR_LISTINGS {
+        uuid id PK
+        uuid vendor_profile_id FK
+        uuid category_id FK
+        text title
+        text city
+        numeric base_price
+        boolean is_active
+    }
+    EVENT_CATEGORIES {
+        uuid id PK
+        text slug
+        text name
+    }
+    CART_ITEMS {
+        uuid id PK
+        uuid user_id FK
+        uuid venue_id FK
+        uuid listing_id FK
+        int quantity
+    }
+    BOOKINGS {
+        uuid id PK
+        uuid user_id FK
+        numeric total_amount
+        numeric amount_paid
+        text status
+        timestamptz created_at
+    }
+    BOOKING_ITEMS {
+        uuid id PK
+        uuid booking_id FK
+        uuid venue_id FK
+        uuid listing_id FK
+        numeric unit_price
+        int quantity
+    }
+    PAYMENT_PROOFS {
+        uuid id PK
+        uuid booking_id FK
+        text reference
+        text screenshot_url
+        numeric amount
+        text status
+    }
+    TRANSACTIONS {
+        uuid id PK
+        uuid booking_id FK
+        numeric amount
+        text method
+        timestamptz created_at
+    }
+    PRICING_RULES {
+        uuid id PK
+        text rule_type
+        text scope
+        numeric value
+        boolean is_active
+    }
+    ALBUMS {
+        uuid id PK
+        text title
+    }
+    PHOTOS {
+        uuid id PK
+        uuid album_id FK
+        text url
+    }
+    REVIEWS {
+        uuid id PK
+        uuid user_id FK
+        int rating
+        text body
+    }
+    ENQUIRIES {
+        uuid id PK
+        uuid user_id FK
+        text message
+    }
